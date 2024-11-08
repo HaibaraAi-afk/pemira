@@ -6,9 +6,10 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WhitelistController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', function () {
-    return "PEMIRA 2025";
+    return Inertia::render("Welcome");
 });
 
 Route::prefix("admin")->group(function () {
