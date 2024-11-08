@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Whitelist;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class WhitelistController extends Controller
 {
@@ -12,7 +13,9 @@ class WhitelistController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render("admin/whitelists", [
+            "whitelists" => Whitelist::all(),
+        ]);
     }
 
     /**

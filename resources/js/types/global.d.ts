@@ -10,6 +10,14 @@ declare global {
 
     /* eslint-disable no-var */
     var route: typeof ziggyRoute;
+
+    interface Organization {
+        code: string;
+        name: string;
+        logo: string;
+        is_public: boolean;
+        is_open: boolean;
+    }
 }
 
 declare module "vue" {
