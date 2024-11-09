@@ -68,14 +68,8 @@ class BallotController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        $ballot = Ballot::find($id);
-
-        if(!$ballot){
-            return response()->json(['message' => 'Ballot not found'], 404);
-        }
-
+     public function update(Request $request, Ballot $ballot)
+     {
         $request->validate([
             'org_code' => 'required',
             'user_id' => 'required',
@@ -100,14 +94,8 @@ class BallotController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Ballot $ballot)
     {
-        $ballot = Ballot::find($id);
-
-        if (!$ballot) {
-            return response()->json(['message' => 'Ballot not found'], 404);
-        }
-
         $ballot->delete();
 
         return response()->json(['message' => 'Ballot Berhasil Dihapus'], 200);
