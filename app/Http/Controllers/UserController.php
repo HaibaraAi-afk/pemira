@@ -34,6 +34,14 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'npm' => 'required',
+            'org_code' => 'required',
+            'type' => 'required',
+        ]);
+        
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -77,6 +85,14 @@ class UserController extends Controller
         if (!$user) {
             return response()->json(['message' => 'User Tidak Ditemukan'], 404);
         }
+
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'npm' => 'required',
+            'org_code' => 'required',
+            'type' => 'required',
+        ]);
 
         $user->update([
             'name' => $request->input('name'),
