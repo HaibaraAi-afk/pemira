@@ -28,7 +28,16 @@ class BallotController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $ballot = Ballot::create([
+            'org_code' => $request->input('org_code'),
+            'user_id' => $request->input('user_id'),
+            'ktm' => $request->input('ktm'),
+            'verification' => $request->input('verification'),
+            'is_verified' => $request->input('is_verified'),
+            'verified_at' => $request->input('verified_at'),
+        ]);
+        
+        return response()->json(['ballot' => $ballot], 201);
     }
 
     /**
@@ -36,7 +45,7 @@ class BallotController extends Controller
      */
     public function show(Ballot $ballot)
     {
-        //
+        
     }
 
     /**
@@ -50,16 +59,39 @@ class BallotController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Ballot $ballot)
+    public function update(Request $request, string $id)
     {
-        //
+        $ballot = Ballot::find($id);
+
+        if(!$ballot){
+            return response()->json(['message' => 'Ballot not found'], 404);
+        }
+
+        $ballot->update([
+            'org_code' => $request->input('org_code'),
+            'user_id' => $request->input('user_id'),
+            'ktm' => $request->input('ktm'),
+            'verification' => $request->input('verification'),
+            'is_verified' => $request->input('is_verified'),
+            'verified_at' => $request->input('verified_at'),
+        ]);
+
+        return response()->json(['message' => 'Ballot Berhasil Diupdate']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ballot $ballot)
+    public function destroy(string $id)
     {
-        //
+        $ballot = Ballot::find($id);
+
+        if (!$ballot) {
+            return response()->json(['message' => 'Ballot not found'], 404);
+        }
+
+        $ballot->delete();
+
+        return response()->json(['message' => 'Ballot Berhasil Dihapus'], 200);
     }
 }
