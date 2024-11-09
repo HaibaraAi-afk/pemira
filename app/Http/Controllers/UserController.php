@@ -56,14 +56,8 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user, string $id)
+    public function show(User $user)
     {
-        $user = User::find($id);
-
-        if (!$user) {
-            return response()->json(['message' => 'User Tidak Ditemukan'], 404);
-        }
-
         return response()->json($user, 200);
     }
 
@@ -78,14 +72,8 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        $user = User::find($id);
-
-        if (!$user) {
-            return response()->json(['message' => 'User Tidak Ditemukan'], 404);
-        }
-
         $request->validate([
             'name' => 'required',
             'email' => 'required',
@@ -108,14 +96,8 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        $user = User::find($id);
-
-        if (!$user) {
-            return response()->json(['message' => 'User Tidak Ditemukan'], 404);
-        }
-
         $user->delete();
 
         return response()->json(['message' => 'User Berhasil Dihapus'], 200);
