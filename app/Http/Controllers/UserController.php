@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -18,6 +20,7 @@ class UserController extends Controller
         ]);
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -31,21 +34,35 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'npm' => $request->input('npm'),
+            'org_code' => $request->input('org_code'),
+            'type' => $request->input('type')
+        ]);
+
+        return response()->json(['user' => $user], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(User $user, string $id)
     {
-        //
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User Tidak Ditemukan'], 404);
+        }
+
+        return response()->json($user, 200);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function edit(string $id)
     {
         //
     }
@@ -53,16 +70,38 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, string $id)
     {
-        //
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User Tidak Ditemukan'], 404);
+        }
+
+        $user->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'npm' => $request->input('npm'),
+            'org_code' => $request->input('org_code'),
+            'type' => $request->input('type')
+        ]);
+
+        return response()->json(['message' => 'User Berhasil Diupdate']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User Tidak Ditemukan'], 404);
+        }
+
+        $user->delete();
+
+        return response()->json(['message' => 'User Berhasil Dihapus'], 200);
     }
 }
