@@ -28,6 +28,15 @@ class BallotController extends Controller
      */
     public function store(Request $request)
     {
+       $request->validate([
+            'org_code' => 'required',
+            'user_id' => 'required',
+            'ktm' => 'required',
+            'verification' => 'required',
+            'is_verified' => 'required',
+            'verified_at' => 'required',
+        ]);
+        
         $ballot = Ballot::create([
             'org_code' => $request->input('org_code'),
             'user_id' => $request->input('user_id'),
@@ -66,6 +75,15 @@ class BallotController extends Controller
         if(!$ballot){
             return response()->json(['message' => 'Ballot not found'], 404);
         }
+
+        $request->validate([
+            'org_code' => 'required',
+            'user_id' => 'required',
+            'ktm' => 'required',
+            'verification' => 'required',
+            'is_verified' => 'required',
+            'verified_at' => 'required',
+        ]);
 
         $ballot->update([
             'org_code' => $request->input('org_code'),
