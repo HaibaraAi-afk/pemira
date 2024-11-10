@@ -41,7 +41,7 @@ const page = usePage<PageProps>();
                     {{ page.props.flash }}
                 </div>
             </CardContent>
-            <CardFooter class="p-6">
+            <CardFooter class="p-6 justify-center">
                 <CardDescription>
                     Butuh bantuan?
                     <a

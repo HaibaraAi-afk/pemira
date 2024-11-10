@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VoteController;
 use App\Http\Controllers\WhitelistController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,16 +20,14 @@ Route::middleware("guest")->group(function () {
 });
 
 Route::middleware("auth")->group(function () {
-    Route::get("/", function () {
-        return Inertia::render("welcome");
-    })->name("index");
+    Route::get("/", [VoteController::class, "index"])->name("index");
 
     Route::get("/logout", [AuthController::class, "logout"])->name("logout");
 
     Route::prefix("admin")->group(function () {
         Route::get("/", function () {
             return Inertia::render("admin/dashboard");
-        })->name("admin.index");
+        })->name("admin.dashboard");
 
         Route::get("/organizations/test", function () {
             return Inertia::render("organizations/dashboard");
@@ -41,5 +41,12 @@ Route::middleware("auth")->group(function () {
             "organizations.groups.candidates",
             CandidateController::class
         );
+    });
+
+    Route::prefix("organizations/{organization}")->group(function () {
+        Route::get("/", [CommitteeController::class, "dashboard"])
+            ->name("organizations.dashboard");
+        Route::get("/ballots", [CommitteeController::class, "ballots"])
+            ->name("organizations.ballots");
     });
 });

@@ -1,4 +1,5 @@
 <script lang="ts">
+import { Skeleton } from "@/components/ui/skeleton";
 import AdminLayout from "@/layouts/AdminLayout.vue";
 
 export default {
@@ -26,14 +27,14 @@ import { Link } from "@inertiajs/vue3";
 const organizations: Organization[] = [
     {
         code: "BEM",
-        name: "BEM Fasilkom",
+        name: "BEM FIK",
         logo: "test",
         is_public: true,
         is_open: false,
     },
     {
         code: "BLM",
-        name: "BLM Fasilkom",
+        name: "BLM FIK",
         logo: "test",
         is_public: true,
         is_open: false,
@@ -74,15 +75,26 @@ const organizations: Organization[] = [
     </Teleport>
     <div class="flex-1">
         <div class="grid gap-4">
-            <div class="grid grid-cols-3 gap-4 *:h-48">
-                <Card></Card>
-                <Card></Card>
-                <Card></Card>
+            <div class="grid grid-cols-3 gap-4">
+                <Card>
+                    <CardHeader>
+                        <CardDescription>Pemilih Terdaftar</CardDescription>
+                        <CardTitle class="text-3xl font-extrabold">
+                            100
+                        </CardTitle>
+                    </CardHeader>
+                </Card>
+                <Card class="overflow-hidden">
+                    <Skeleton class="size-full" />
+                </Card>
+                <Card class="overflow-hidden">
+                    <Skeleton class="size-full" />
+                </Card>
             </div>
             <Card>
                 <CardHeader>
                     <CardTitle>Organizations</CardTitle>
-                    <CardDescription>Click to Open</CardDescription>
+                    <CardDescription>Manage organizations data</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div class="grid grid-cols-4 gap-4">

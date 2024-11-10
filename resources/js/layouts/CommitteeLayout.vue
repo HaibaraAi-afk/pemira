@@ -26,40 +26,29 @@ import {
 } from "@/components/ui/sidebar";
 import { PageProps } from "@/types";
 import { router, usePage } from "@inertiajs/vue3";
-import {
-    Building,
-    Check,
-    ChevronsUpDown,
-    LayoutDashboard,
-    LogOut,
-    Users,
-    Vote,
-} from "lucide-vue-next";
+import { ChevronsUpDown, LayoutDashboard, LogOut, Vote } from "lucide-vue-next";
 
 const page = usePage<PageProps>();
 const user = page.props.auth.user;
+const props = defineProps<{
+    organization: string;
+}>();
 
 const menu = {
     items: [
         {
             name: "Dashboard",
-            url: route("admin.dashboard"),
+            url: route("organizations.dashboard", {
+                organization: props.organization,
+            }),
             icon: LayoutDashboard,
         },
         {
-            name: "Organizations",
-            url: route("organizations.index"),
-            icon: Building,
-        },
-        {
-            name: "Whitelists",
-            url: route("whitelists.index"),
-            icon: Check,
-        },
-        {
-            name: "Users",
-            url: route("users.index"),
-            icon: Users,
+            name: "Surat Suara",
+            url: route("organizations.ballots", {
+                organization: props.organization,
+            }),
+            icon: Vote,
         },
     ],
 };
@@ -95,7 +84,7 @@ const menu = {
                                     size="lg"
                                     class="data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
                                 >
-                                    <Avatar>
+                                    <Avatar class="size-8">
                                         <AvatarImage
                                             v-if="user.avatar"
                                             :src="user.avatar"
@@ -125,7 +114,7 @@ const menu = {
                                     <div
                                         class="flex items-center gap-2 px-1 py-1.5 text-left text-sm"
                                     >
-                                        <Avatar>
+                                        <Avatar class="size-8">
                                             <AvatarImage
                                                 v-if="user.avatar"
                                                 :src="user.avatar"
@@ -152,7 +141,7 @@ const menu = {
                                     @click="router.visit(route('index'))"
                                 >
                                     <Vote />
-                                    Back to Vote
+                                    Back to vote
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     class="cursor-pointer"

@@ -4,7 +4,7 @@ export interface User {
     email: string;
     name: string;
     org_code: string;
-    type: string;
+    type: "voter" | "committee" | "admin";
     avatar?: string;
 }
 
