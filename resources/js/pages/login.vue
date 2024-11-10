@@ -17,7 +17,7 @@ const page = usePage<PageProps>();
 </script>
 
 <template>
-    <div class="h-dvh flex items-center justify-center p-4">
+    <div class="min-h-dvh flex items-center justify-center p-4">
         <Card class="max-w-sm w-full">
             <CardHeader class="border-b text-center text-pretty">
                 <Skeleton class="size-32 mx-auto rounded-full mb-2" />
