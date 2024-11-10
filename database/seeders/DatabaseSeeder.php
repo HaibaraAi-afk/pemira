@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (["22081010124", "22081010158", "22081010229", "23082010093"] as $npm) {
+        foreach (["22081010124", "22081010158", "22081010229", "23082010093", "24082010017"] as $npm) {
             Whitelist::query()->create(["npm" => $npm]);
         }
         User::query()->create([
@@ -35,6 +35,13 @@ class DatabaseSeeder extends Seeder
             "npm" => "23082010093",
             "email" => "23082010093@student.upnjatim.ac.id",
             "name" => "Hafidz",
+            "org_code" => "20",
+            "type" => "admin",
+        ]);
+        User::query()->create([
+            "npm" => "24082010017",
+            "email" => "24082010017@student.upnjatim.ac.id",
+            "name" => "Evelin",
             "org_code" => "20",
             "type" => "admin",
         ]);
