@@ -115,7 +115,7 @@ function setOrganization(org: (typeof menu.orgs)[number]) {
                                     class="data-[state=open]:bg-accent data-[state=open]:text-accent-foreground border"
                                 >
                                     <div
-                                        class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
+                                        class="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground"
                                     >
                                         <component
                                             :is="currentOrganization.logo"
