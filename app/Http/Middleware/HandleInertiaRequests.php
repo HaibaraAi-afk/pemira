@@ -29,11 +29,15 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        if ($request->route()->getName() === "auth.callback") {
+            return [];
+        }
         return [
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
             ],
+            "flash" => $request->session()->get("flash"),
         ];
     }
 }

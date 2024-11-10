@@ -5,6 +5,7 @@ export interface User {
     name: string;
     org_code: string;
     type: string;
+    avatar?: string;
 }
 
 export type PageProps<
@@ -13,4 +14,5 @@ export type PageProps<
     auth: {
         user: User;
     };
+    flash?: string;
 };

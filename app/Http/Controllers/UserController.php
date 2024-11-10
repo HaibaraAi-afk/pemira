@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -41,7 +40,7 @@ class UserController extends Controller
             'org_code' => 'required',
             'type' => 'required',
         ]);
-        
+
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),

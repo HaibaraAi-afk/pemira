@@ -12,6 +12,8 @@ class User extends Authenticatable
         "name",
         "org_code",
         "type",
+        "google_id",
+        "avatar"
     ];
 
     public function ballots()
