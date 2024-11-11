@@ -23,7 +23,7 @@ class WhitelistController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render("whitelists/create");
     }
 
     /**
@@ -31,7 +31,21 @@ class WhitelistController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd(Whitelist::query()->with('user')->get());
+        $request->validate([
+            'whitelists' => 'required',
+        ]);
+        $whitelist = preg_split("/\r\n|\n|\r/", $request->whitelists);
+        Whitelist::query()->whereDoesntHave('user')->delete();
+        Whitelist::query()->whereHas('user', function ($query) {
+            $query->where('type', 'voter');
+        })->delete();
+        foreach ($whitelist as $npm) {
+            Whitelist::create([
+                'npm' => $npm,
+            ]);
+        }
+        return response()->json(['whitelist' => $whitelist], 201);
     }
 
     /**
@@ -39,7 +53,7 @@ class WhitelistController extends Controller
      */
     public function show(Whitelist $whitelist)
     {
-        //
+        return response()->json($whitelist, 200);
     }
 
     /**
