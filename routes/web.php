@@ -24,14 +24,13 @@ Route::middleware("auth")->group(function () {
     Route::get("/", [VoteController::class, "index"])->name("index");
     Route::get("/logout", [AuthController::class, "logout"])->name("logout");
 
-    Route::prefix("admin")->group(function () {
+    Route::prefix("admin")->as("admin.")->group(function () {
         Route::get("/", [AdminDashboardController::class, "index"])
-            ->name("admin.dashboard");
+            ->name("dashboard");
 
         Route::get("/organizations/test", function () {
             return Inertia::render("admin/organizations/dashboard");
         })->name("organizations.test");
-
 
         Route::resource("whitelists", WhitelistController::class);
         Route::post("/whitelists/validate", [WhitelistController::class, "validate"])

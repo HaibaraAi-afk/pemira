@@ -12,7 +12,9 @@ defineProps<{
         <CardHeader>
             <div class="flex gap-4">
                 <div class="flex-1">
-                    <CardTitle>{{ organization.name }}</CardTitle>
+                    <CardTitle class="truncate">
+                        {{ organization.name }}
+                    </CardTitle>
                     <CardDescription>{{ organization.code }}</CardDescription>
                 </div>
                 <CardDescription class="flex items-center">

@@ -68,21 +68,23 @@ const organizations: Organization[] = [
         </Breadcrumb>
     </Teleport>
     <div class="flex-1">
-        <div class="grid grid-cols-4 gap-4">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <Link
                 v-for="organization in organizations"
-                :href="route('organizations.test')"
+                :href="route('admin.organizations.test')"
             >
                 <OrganizationCard
                     :organization="organization"
                     class="cursor-pointer hover:outline"
                 />
             </Link>
-            <Card
-                class="flex items-center justify-center bg-muted text-muted-foreground cursor-pointer hover:outline"
-            >
-                <Plus />
-            </Card>
+            <div>
+                <Card
+                    class="flex items-center justify-center h-[84px] bg-muted text-muted-foreground cursor-pointer hover:outline"
+                >
+                    <Plus />
+                </Card>
+            </div>
         </div>
     </div>
 </template>

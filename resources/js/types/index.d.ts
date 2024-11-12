@@ -21,4 +21,5 @@ export type PageProps<
         user: User;
     };
     flash?: Flash;
+    organizations?: Organization[] | null;
 };

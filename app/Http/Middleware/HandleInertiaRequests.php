@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Organization;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -41,6 +42,9 @@ class HandleInertiaRequests extends Middleware
                 "message" => $request->session()->get("flash.message"),
                 "type" => $request->session()->get("flash.type", "default"),
             ] : null,
+            "organizations" => $request->user()->type === "admin" ?
+                Organization::all() :
+                null,
         ];
     }
 }

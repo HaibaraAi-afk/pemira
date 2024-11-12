@@ -42,7 +42,7 @@ class WhitelistController extends Controller
                 'npm' => $npm,
             ]);
         }
-        return redirect(route("whitelists.index"))
+        return redirect(route("admin.whitelists.index"))
             ->with("flash.message", "Whitelist updated");
     }
 

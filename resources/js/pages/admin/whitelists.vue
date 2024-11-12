@@ -63,7 +63,7 @@ const massForm = useForm({
                             class="space-y-6 mt-2"
                             @submit.prevent="
                                 validateForm.post(
-                                    route('whitelists.validate'),
+                                    route('admin.whitelists.validate'),
                                     {
                                         data: {
                                             npm: validateForm.npm,
@@ -105,7 +105,9 @@ const massForm = useForm({
                         <form
                             class="space-y-6 mt-2"
                             @submit.prevent="
-                                storeForm.post(route('whitelists.store.single'))
+                                storeForm.post(
+                                    route('admin.whitelists.store.single')
+                                )
                             "
                         >
                             <div class="space-y-2">
@@ -141,7 +143,7 @@ const massForm = useForm({
                         <form
                             class="space-y-6 mt-2"
                             @submit.prevent="
-                                massForm.post(route('whitelists.store'))
+                                massForm.post(route('admin.whitelists.store'))
                             "
                         >
                             <div class="space-y-2">

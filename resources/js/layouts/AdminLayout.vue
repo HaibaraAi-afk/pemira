@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 import {
     DropdownMenu,
@@ -26,7 +27,7 @@ import {
     SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { PageProps } from "@/types";
-import { router, usePage } from "@inertiajs/vue3";
+import { Link, router, usePage } from "@inertiajs/vue3";
 import {
     Building,
     Check,
@@ -34,6 +35,7 @@ import {
     Flame,
     LayoutDashboard,
     LogOut,
+    Plus,
     Users,
     Vote,
 } from "lucide-vue-next";
@@ -49,22 +51,55 @@ const menu = {
             icon: LayoutDashboard,
         },
         {
-            name: "Organizations",
-            url: route("organizations.index"),
-            icon: Building,
-        },
-        {
             name: "Whitelists",
-            url: route("whitelists.index"),
+            url: route("admin.whitelists.index"),
             icon: Check,
         },
         {
             name: "Users",
-            url: route("users.index"),
+            url: route("admin.users.index"),
             icon: Users,
         },
     ],
 };
+
+const _organizations: Organization[] = [
+    {
+        code: "BEM",
+        name: "BEM FASILKOM",
+        logo: "test",
+        is_public: true,
+        is_open: false,
+    },
+    {
+        code: "BLM",
+        name: "BLM FASILKOM",
+        logo: "test",
+        is_public: true,
+        is_open: false,
+    },
+    {
+        code: "20",
+        name: "HIMASIFO",
+        logo: "test",
+        is_public: true,
+        is_open: false,
+    },
+    {
+        code: "30",
+        name: "HIMASADA",
+        logo: "test",
+        is_public: true,
+        is_open: false,
+    },
+    {
+        code: "40",
+        name: "HIMABISDI",
+        logo: "test",
+        is_public: true,
+        is_open: false,
+    },
+];
 </script>
 
 <template>
@@ -100,15 +135,32 @@ const menu = {
                 <SidebarGroup>
                     <SidebarGroupLabel>Menu</SidebarGroupLabel>
                     <SidebarMenu>
-                        <SidebarMenuItem
-                            v-for="item in menu.items"
-                            :key="item.name"
-                        >
+                        <SidebarMenuItem v-for="item in menu.items">
                             <SidebarMenuButton as-child>
-                                <a :href="item.url">
+                                <Link :href="item.url">
                                     <component :is="item.icon" />
                                     <span>{{ item.name }}</span>
-                                </a>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarGroup>
+                <SidebarGroup>
+                    <SidebarGroupLabel class="flex justify-between">
+                        Organizations
+                        <Button size="icon" variant="ghost">
+                            <Plus class="size-4 text-muted-foreground" />
+                        </Button>
+                    </SidebarGroupLabel>
+                    <SidebarMenu>
+                        <SidebarMenuItem v-for="organization in _organizations">
+                            <SidebarMenuButton as-child>
+                                <Link
+                                    :href="route('admin.organizations.index')"
+                                >
+                                    <Building class="size-4" />
+                                    {{ organization.name }}
+                                </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>

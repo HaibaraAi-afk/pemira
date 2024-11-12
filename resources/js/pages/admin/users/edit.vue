@@ -51,7 +51,7 @@ const form = useForm({
                 <BreadcrumbItem class="hidden md:block">
                     <BreadcrumbLink
                         :href="
-                            route('users.index', {
+                            route('admin.users.index', {
                                 _query: { type: user.type },
                             })
                         "
@@ -76,7 +76,7 @@ const form = useForm({
                 <form
                     class="space-y-6"
                     @submit.prevent="
-                        form.put(route('users.update', { user: user.id }))
+                        form.put(route('admin.users.update', { user: user.id }))
                     "
                 >
                     <div class="space-y-2">
@@ -125,7 +125,7 @@ const form = useForm({
                         <Button type="submit">Save</Button>
                         <Link
                             :href="
-                                route('users.index', {
+                                route('admin.users.index', {
                                     _query: { type: user.type },
                                 })
                             "

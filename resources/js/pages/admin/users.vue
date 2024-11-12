@@ -45,24 +45,26 @@ const props = withDefaults(
 const type = ref(props.type);
 
 const edit = (user: User) => {
-    router.visit(route("users.edit", { user, _query: { type: type.value } }));
+    router.visit(
+        route("admin.users.edit", { user, _query: { type: type.value } })
+    );
 };
 
 const destroy = (user: User) => {
-    router.delete(route("users.destroy", { user: user.id }));
+    router.delete(route("admin.users.destroy", { user: user.id }));
 };
 
 const prev = () => {
-    if (props.users.prev_page_url) {
-        router.visit(props.users.prev_page_url, {
+    if (props.admin.users.prev_page_url) {
+        router.visit(props.admin.users.prev_page_url, {
             data: { type: type.value },
         });
     }
 };
 
 const next = () => {
-    if (props.users.next_page_url) {
-        router.visit(props.users.next_page_url, {
+    if (props.admin.users.next_page_url) {
+        router.visit(props.admin.users.next_page_url, {
             data: { type: type.value },
         });
     }
@@ -88,7 +90,7 @@ const next = () => {
                         <Select
                             v-model="type"
                             @change="
-                                router.visit(route('users.index'), {
+                                router.visit(route('admin.users.index'), {
                                     data: { type },
                                 })
                             "
@@ -101,7 +103,7 @@ const next = () => {
                         </Select>
                     </div>
                 </div>
-                <Link :href="route('users.create', { _query: { type } })">
+                <Link :href="route('admin.users.create', { _query: { type } })">
                     <Button>Add New</Button>
                 </Link>
             </CardHeader>
@@ -116,7 +118,7 @@ const next = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow v-if="!users.data.length">
+                        <TableRow v-if="!admin.users.data.length">
                             <TableCell
                                 class="text-center text-muted-foreground"
                                 colspan="4"
@@ -124,7 +126,7 @@ const next = () => {
                                 No data yet
                             </TableCell>
                         </TableRow>
-                        <TableRow v-for="user in users.data">
+                        <TableRow v-for="user in admin.users.data">
                             <TableCell>{{ user.org_code }}</TableCell>
                             <TableCell>{{ user.npm }}</TableCell>
                             <TableCell>
@@ -162,14 +164,14 @@ const next = () => {
                 </Table>
                 <div class="flex justify-end gap-2">
                     <Button
-                        :disabled="!users.prev_page_url"
+                        :disabled="!admin.users.prev_page_url"
                         variant="outline"
                         @click="prev"
                     >
                         Previous
                     </Button>
                     <Button
-                        :disabled="!users.next_page_url"
+                        :disabled="!admin.users.next_page_url"
                         variant="outline"
                         @click="next"
                     >

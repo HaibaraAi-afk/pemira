@@ -31,7 +31,7 @@ class UserController extends Controller
      */
     public function create(Request $request)
     {
-        return Inertia::render("users/create", [
+        return Inertia::render("admin/users/create", [
             "type" => $request->input("type", "admin"),
         ]);
     }
@@ -60,7 +60,7 @@ class UserController extends Controller
 
         Whitelist::query()->firstOrCreate(["npm" => $request->input("npm")]);
 
-        return redirect(route("users.index", ["type" => $user->type]))
+        return redirect(route("admin.users.index", ["type" => $user->type]))
             ->with("flash.message", "User has been added.");
     }
 
@@ -77,7 +77,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return Inertia::render("users/edit", ["user" => $user]);
+        return Inertia::render("admin/users/edit", ["user" => $user]);
     }
 
     /**
@@ -103,7 +103,7 @@ class UserController extends Controller
 
         Whitelist::query()->firstOrCreate(["npm" => $request->input("npm")]);
 
-        return redirect(route("users.index", ["type" => $user->type]))
+        return redirect(route("admin.users.index", ["type" => $user->type]))
             ->with("flash.message", "User has been updated.");
     }
 
@@ -113,7 +113,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect(route("users.index", ["type" => $user->type]))
+        return redirect(route("admin.users.index", ["type" => $user->type]))
             ->with("flash.message", "User {$user->name} has been deleted.");
     }
 }

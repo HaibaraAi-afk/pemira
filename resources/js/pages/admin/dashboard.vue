@@ -83,7 +83,7 @@ const _organizations: Organization[] = [
     </Teleport>
     <div class="flex-1">
         <div class="grid gap-4">
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
                 <Card>
                     <CardHeader
                         class="flex flex-row items-center justify-between space-y-0 pb-2"
@@ -147,7 +147,9 @@ const _organizations: Organization[] = [
                     <CardDescription>Dashboards</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="grid grid-cols-4 gap-4">
+                    <div
+                        class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                    >
                         <Link
                             v-for="organization in _organizations"
                             :href="

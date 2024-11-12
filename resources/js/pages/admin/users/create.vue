@@ -39,8 +39,6 @@ const props = withDefaults(
     }
 );
 
-console.log(props.type);
-
 const form = useForm({
     npm: "",
     email: "",
@@ -57,7 +55,7 @@ const form = useForm({
                 <BreadcrumbItem class="hidden md:block">
                     <BreadcrumbLink
                         :href="
-                            route('users.index', {
+                            route('admin.users.index', {
                                 _query: { type },
                             })
                         "
@@ -81,7 +79,7 @@ const form = useForm({
             <CardContent>
                 <form
                     class="space-y-6"
-                    @submit.prevent="form.post(route('users.store'))"
+                    @submit.prevent="form.post(route('admin.users.store'))"
                 >
                     <div class="space-y-2">
                         <Label>NPM</Label>
@@ -128,7 +126,9 @@ const form = useForm({
                     <div class="flex flex-row-reverse justify-between">
                         <Button type="submit">Add</Button>
                         <Link
-                            :href="route('users.index', { _query: { type } })"
+                            :href="
+                                route('admin.users.index', { _query: { type } })
+                            "
                         >
                             <Button type="button" variant="outline">
                                 Back
