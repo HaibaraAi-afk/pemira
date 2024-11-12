@@ -122,7 +122,7 @@ const isOpen = ref(false);
                                 icon="tabler:arrow-wave-right-down"
                                 class="size-16 text-orange-500 -rotate-[24deg]"
                             />
-                            <Button size="lg" class="text-lg">
+                            <Button size="lg" class="text-lg font-extrabold">
                                 🔥SHARE🔥
                             </Button>
                             <Icon

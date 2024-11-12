@@ -1,7 +1,5 @@
 <script lang="ts">
 import AdminLayout from "@/layouts/AdminLayout.vue";
-import { Link } from "@inertiajs/vue3";
-import { Plus } from "lucide-vue-next";
 
 export default {
     layout: AdminLayout,
@@ -17,18 +15,20 @@ import {
     BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import { Card } from "@/components/ui/card";
+import { Link } from "@inertiajs/vue3";
+import { Plus } from "lucide-vue-next";
 
 const organizations: Organization[] = [
     {
         code: "BEM",
-        name: "BEM Fasilkom",
+        name: "BEM FASILKOM",
         logo: "test",
         is_public: true,
         is_open: false,
     },
     {
         code: "BLM",
-        name: "BLM Fasilkom",
+        name: "BLM FASILKOM",
         logo: "test",
         is_public: true,
         is_open: false,
@@ -73,10 +73,13 @@ const organizations: Organization[] = [
                 v-for="organization in organizations"
                 :href="route('organizations.test')"
             >
-                <OrganizationCard :organization="organization" />
+                <OrganizationCard
+                    :organization="organization"
+                    class="cursor-pointer hover:outline"
+                />
             </Link>
             <Card
-                class="flex items-center justify-center text-foreground/25 cursor-pointer hover:outline"
+                class="flex items-center justify-center bg-muted text-muted-foreground cursor-pointer hover:outline"
             >
                 <Plus />
             </Card>

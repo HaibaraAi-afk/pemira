@@ -8,14 +8,14 @@ class CommitteeController extends Controller
 {
     public function dashboard($organization)
     {
-        return Inertia::render("committees/dashboard", [
+        return Inertia::render("organizations/dashboard", [
             "organization" => $organization,
         ]);
     }
 
     public function ballots($organization)
     {
-        return Inertia::render("committees/dashboard", [
+        return Inertia::render("organizations/dashboard", [
             "organization" => $organization,
         ]);
     }

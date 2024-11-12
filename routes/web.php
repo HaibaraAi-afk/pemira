@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CommitteeController;
@@ -21,27 +22,26 @@ Route::middleware("guest")->group(function () {
 
 Route::middleware("auth")->group(function () {
     Route::get("/", [VoteController::class, "index"])->name("index");
-
     Route::get("/logout", [AuthController::class, "logout"])->name("logout");
 
     Route::prefix("admin")->group(function () {
-        Route::get("/", function () {
-            return Inertia::render("admin/dashboard");
-        })->name("admin.dashboard");
+        Route::get("/", [AdminDashboardController::class, "index"])
+            ->name("admin.dashboard");
 
         Route::get("/organizations/test", function () {
-            return Inertia::render("organizations/dashboard");
+            return Inertia::render("admin/organizations/dashboard");
         })->name("organizations.test");
 
-        Route::resource("users", UserController::class);
 
+        Route::resource("whitelists", WhitelistController::class);
         Route::post("/whitelists/validate", [WhitelistController::class, "validate"])
             ->name("whitelists.validate");
         Route::post("/whitelists/single", [WhitelistController::class, "storeSingle"])
             ->name("whitelists.store.single");
 
-        Route::resource("whitelists", WhitelistController::class);
+        Route::resource("users", UserController::class);
         Route::resource("organizations", OrganizationController::class);
+
         Route::resource("organizations.groups", GroupController::class);
         Route::resource(
             "organizations.groups.candidates",

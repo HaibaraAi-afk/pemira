@@ -19,9 +19,13 @@ const page = usePage<PageProps>();
 
 <template>
     <div class="min-h-dvh flex items-center justify-center p-4">
+        <img
+            src="/login.webp"
+            class="absolute size-full object-cover opacity-15 blur -z-10"
+        />
         <Card class="max-w-sm w-full">
             <CardHeader class="border-b text-center text-pretty">
-                <Skeleton class="size-32 mx-auto rounded-full mb-2" />
+                <Skeleton class="size-32 mx-auto border rounded-full mb-2" />
                 <CardTitle class="text-3xl font-extrabold">PEMIRA</CardTitle>
                 <CardTitle>Fakultas Ilmu Komputer 2025</CardTitle>
                 <CardDescription>

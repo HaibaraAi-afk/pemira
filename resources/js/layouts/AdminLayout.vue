@@ -16,6 +16,7 @@ import {
     SidebarFooter,
     SidebarGroup,
     SidebarGroupLabel,
+    SidebarHeader,
     SidebarInset,
     SidebarMenu,
     SidebarMenuButton,
@@ -30,6 +31,7 @@ import {
     Building,
     Check,
     ChevronsUpDown,
+    Flame,
     LayoutDashboard,
     LogOut,
     Users,
@@ -68,6 +70,32 @@ const menu = {
 <template>
     <SidebarProvider>
         <Sidebar collapsible="icon">
+            <SidebarHeader>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            size="lg"
+                            class="data-[state=open]:bg-accent data-[state=open]:text-accent-foreground border"
+                        >
+                            <div
+                                class="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground"
+                            >
+                                <Flame class="size-4" />
+                            </div>
+                            <div
+                                class="grid flex-1 text-left text-sm leading-tight"
+                            >
+                                <span class="truncate font-extrabold">
+                                    PEMIRA
+                                </span>
+                                <span class="truncate text-xs">
+                                    Fakultas Ilmu Komputer
+                                </span>
+                            </div>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupLabel>Menu</SidebarGroupLabel>
