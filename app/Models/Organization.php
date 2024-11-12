@@ -10,6 +10,7 @@ class Organization extends Model
         "major",
         "name",
         "logo",
+        "ordering",
         "is_open",
     ];
 
