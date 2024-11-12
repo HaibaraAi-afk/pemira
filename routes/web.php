@@ -6,6 +6,7 @@ use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\OrganizationDashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\WhitelistController;
@@ -28,10 +29,6 @@ Route::middleware("auth")->group(function () {
         Route::get("/", [AdminDashboardController::class, "index"])
             ->name("dashboard");
 
-        Route::get("/organizations/test", function () {
-            return Inertia::render("admin/organizations/dashboard");
-        })->name("organizations.test");
-
         Route::resource("whitelists", WhitelistController::class);
         Route::post("/whitelists/validate", [WhitelistController::class, "validate"])
             ->name("whitelists.validate");
@@ -49,9 +46,7 @@ Route::middleware("auth")->group(function () {
     });
 
     Route::prefix("organizations/{organization}")->group(function () {
-        Route::get("/", [CommitteeController::class, "dashboard"])
+        Route::get("/", [OrganizationDashboardController::class, "dashboard"])
             ->name("organizations.dashboard");
-        Route::get("/ballots", [CommitteeController::class, "ballots"])
-            ->name("organizations.ballots");
     });
 });

@@ -22,11 +22,35 @@ declare global {
     }
 
     interface Organization {
-        code: string;
+        id: number;
+        major: string | null;
         name: string;
         logo: string;
-        is_public: boolean;
         is_open: boolean;
+    }
+
+    interface Group {
+        id: number;
+        organization_id: string;
+        year: string | null;
+        major: string | null;
+        name: string;
+        min_candidates: number;
+        ordering: number;
+
+        candidates?: Candidate[];
+        candidates_count?: number;
+    }
+
+    interface Candidate {
+        id: number;
+        organization_id: number;
+        group_id: number;
+        name_1: string;
+        name_2: string;
+        vision: string;
+        mission: string;
+        picture: string;
     }
 
     interface Whitelist {

@@ -1,6 +1,6 @@
 <script lang="ts">
 import AdminLayout from "@/layouts/AdminLayout.vue";
-import { Check, Users2 } from "lucide-vue-next";
+import { Check, LayoutDashboard, Users2 } from "lucide-vue-next";
 
 export default {
     layout: AdminLayout,
@@ -8,7 +8,6 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import OrganizationCard from "@/components/OrganizationCard.vue";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -31,44 +30,6 @@ defineProps<{
     admins: number;
     organizations: Organization[];
 }>();
-
-const _organizations: Organization[] = [
-    {
-        code: "BEM",
-        name: "BEM FASILKOM",
-        logo: "test",
-        is_public: true,
-        is_open: false,
-    },
-    {
-        code: "BLM",
-        name: "BLM FASILKOM",
-        logo: "test",
-        is_public: true,
-        is_open: false,
-    },
-    {
-        code: "20",
-        name: "HIMASIFO",
-        logo: "test",
-        is_public: true,
-        is_open: false,
-    },
-    {
-        code: "30",
-        name: "HIMASADA",
-        logo: "test",
-        is_public: true,
-        is_open: false,
-    },
-    {
-        code: "40",
-        name: "HIMABISDI",
-        logo: "test",
-        is_public: true,
-        is_open: false,
-    },
-];
 </script>
 
 <template>
@@ -142,27 +103,40 @@ const _organizations: Organization[] = [
                 </Card>
             </div>
             <Card>
-                <CardHeader>
-                    <CardTitle>Organizations</CardTitle>
-                    <CardDescription>Dashboards</CardDescription>
+                <CardHeader class="flex-row justify-between gap-4">
+                    <div class="space-y-1.5">
+                        <CardTitle>Organizations</CardTitle>
+                        <CardDescription>Dashboards</CardDescription>
+                    </div>
+                    <LayoutDashboard class="size-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                     <div
                         class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
                     >
                         <Link
-                            v-for="organization in _organizations"
+                            v-for="organization in organizations"
                             :href="
                                 route('organizations.dashboard', {
-                                    organization: organization.code,
+                                    organization: organization.id,
                                 })
                             "
                             class="block"
                         >
-                            <OrganizationCard
-                                :organization="organization"
-                                class="cursor-pointer hover:outline"
-                            />
+                            <Card class="cursor-pointer hover:outline">
+                                <CardHeader
+                                    class="flex-row justify-between gap-4"
+                                >
+                                    <div>
+                                        <CardTitle>
+                                            {{ organization.name }}
+                                        </CardTitle>
+                                        <CardDescription>
+                                            {{ organization.major ?? "-" }}
+                                        </CardDescription>
+                                    </div>
+                                </CardHeader>
+                            </Card>
                         </Link>
                     </div>
                 </CardContent>

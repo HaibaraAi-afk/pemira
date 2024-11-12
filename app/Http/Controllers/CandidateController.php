@@ -6,6 +6,7 @@ use App\Models\Candidate;
 use App\Models\Group;
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CandidateController extends Controller
 {
@@ -22,7 +23,7 @@ class CandidateController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render("admin/organizations/groups/candidates/create");
     }
 
     /**
@@ -52,7 +53,9 @@ class CandidateController extends Controller
         Group $group,
         Candidate $candidate
     ) {
-        //
+        return Inertia::render("admin/organizations/groups/candidates/edit", [
+            "candidate" => $candidate,
+        ]);
     }
 
     /**

@@ -23,4 +23,6 @@ export type PageProps<
     };
     flash?: Flash;
     organizations?: Organization[] | null;
+    organization: Organization | null;
+    group: Group | null;
 };

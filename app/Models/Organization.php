@@ -23,7 +23,7 @@ class Organization extends Model
 
     public function groups()
     {
-        return $this->hasMany(Group::class);
+        return $this->hasMany(Group::class)->orderBy("ordering");
     }
 
     public function candidates()

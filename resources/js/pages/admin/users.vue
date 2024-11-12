@@ -1,18 +1,13 @@
 <script lang="ts">
-import Select from "@/components/Select.vue";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Label } from "@/components/ui/label";
-import { SelectItem } from "@/components/ui/select";
 import AdminLayout from "@/layouts/AdminLayout.vue";
-import { Edit, Trash2 } from "lucide-vue-next";
-import { ref } from "vue";
-
 export default {
     layout: AdminLayout,
 };
 </script>
 
 <script lang="ts" setup>
+import Select from "@/components/Select.vue";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -21,6 +16,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { SelectItem } from "@/components/ui/select";
 import {
     Table,
     TableBody,
@@ -31,6 +28,8 @@ import {
 } from "@/components/ui/table";
 import { User } from "@/types";
 import { Link, router } from "@inertiajs/vue3";
+import { Edit, Trash2 } from "lucide-vue-next";
+import { ref } from "vue";
 
 const props = withDefaults(
     defineProps<{
@@ -51,6 +50,9 @@ const edit = (user: User) => {
 };
 
 const destroy = (user: User) => {
+    if (!confirm("Are you sure you want to delete this user?")) {
+        return;
+    }
     router.delete(route("admin.users.destroy", { user: user.id }));
 };
 

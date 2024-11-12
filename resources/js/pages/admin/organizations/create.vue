@@ -1,6 +1,8 @@
 <script lang="ts">
 import AdminLayout from "@/layouts/AdminLayout.vue";
 import { Link, useForm } from "@inertiajs/vue3";
+import { Plus } from "lucide-vue-next";
+import { ref } from "vue";
 
 export default {
     layout: AdminLayout,
@@ -9,11 +11,10 @@ export default {
 
 <script lang="ts" setup>
 import FormMessage from "@/components/FormMessage.vue";
-import Select from "@/components/Select.vue";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
     Breadcrumb,
     BreadcrumbItem,
-    BreadcrumbLink,
     BreadcrumbList,
     BreadcrumbPage,
     BreadcrumbSeparator,
@@ -28,9 +29,28 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SelectItem } from "@/components/ui/select";
 
-const form = useForm({});
+const form = useForm({
+    logo: <File | undefined>undefined,
+    major: "",
+    name: "",
+});
+
+const logoInput = ref<HTMLInputElement>();
+const logoURL = ref<string>();
+
+const setLogo = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    form.logo = target.files?.[0];
+
+    if (form.logo) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            logoURL.value = e.target?.result as string;
+        };
+        reader.readAsDataURL(form.logo);
+    }
+};
 </script>
 
 <template>
@@ -38,9 +58,7 @@ const form = useForm({});
         <Breadcrumb>
             <BreadcrumbList>
                 <BreadcrumbItem class="hidden md:block">
-                    <BreadcrumbLink :href="route('admin.users.index')">
-                        Users
-                    </BreadcrumbLink>
+                    Organizations
                 </BreadcrumbItem>
                 <BreadcrumbSeparator class="hidden md:block" />
                 <BreadcrumbItem>
@@ -52,63 +70,67 @@ const form = useForm({});
     <div class="flex-1">
         <Card class="max-w-sm">
             <CardHeader>
-                <CardTitle>Add New User</CardTitle>
+                <CardTitle>Add New Organization</CardTitle>
                 <CardDescription>Please complete the form</CardDescription>
             </CardHeader>
             <CardContent>
                 <form
-                    class="space-y-6"
-                    @submit.prevent="form.post(route('admin.users.store'))"
+                    class="space-y-4"
+                    @submit.prevent="
+                        form.post(route('admin.organizations.store'))
+                    "
                 >
-                    <div class="space-y-2">
-                        <Label>NPM</Label>
-                        <Input v-model="form.npm" autofocus />
-                        <FormMessage v-if="form.errors.npm" variant="error">
-                            {{ form.errors.npm }}
-                        </FormMessage>
-                    </div>
-                    <div class="space-y-2">
-                        <Label>Email</Label>
-                        <Input v-model="form.email" type="email" />
-                        <FormMessage v-if="form.errors.email" variant="error">
-                            {{ form.errors.email }}
+                    <div class="space-y-2 text-center">
+                        <Label class="block">Logo</Label>
+                        <input
+                            ref="logoInput"
+                            type="file"
+                            class="absolute -top-24 -left-24"
+                            accept="image/webp"
+                            @change="setLogo"
+                        />
+                        <img
+                            v-if="logoURL"
+                            :src="logoURL"
+                            alt="Logo"
+                            class="mx-auto size-24 hover:opacity-75 cursor-pointer"
+                            @click="$refs.logoInput.click()"
+                        />
+                        <Avatar
+                            v-else
+                            class="size-24 border-2 cursor-pointer hover:outline"
+                            @click="$refs.logoInput.click()"
+                        >
+                            <AvatarFallback>
+                                <Plus class="size-4 text-muted-foreground" />
+                            </AvatarFallback>
+                        </Avatar>
+                        <FormMessage v-if="form.errors.logo" variant="error">
+                            {{ form.errors.logo }}
                         </FormMessage>
                     </div>
                     <div class="space-y-2">
                         <Label>Name</Label>
-                        <Input v-model="form.name" />
+                        <Input v-model="form.name" autofocus />
                         <FormMessage v-if="form.errors.name" variant="error">
                             {{ form.errors.name }}
                         </FormMessage>
                     </div>
                     <div class="space-y-2">
-                        <Label>Type</Label>
-                        <Select v-model="form.type">
-                            <SelectItem value="admin">Admin</SelectItem>
-                            <SelectItem value="committee">Committee</SelectItem>
-                            <SelectItem value="voter">Voter</SelectItem>
-                        </Select>
-                        <FormMessage v-if="form.errors.type" variant="error">
-                            {{ form.errors.type }}
-                        </FormMessage>
-                    </div>
-                    <div class="space-y-2">
-                        <Label>Organization Code</Label>
-                        <Input v-model="form.org_code" />
-                        <FormMessage
-                            v-if="form.errors.org_code"
-                            variant="error"
-                        >
-                            {{ form.errors.org_code }}
+                        <Label>
+                            Major
+                            <span class="text-muted-foreground">
+                                - Optional
+                            </span>
+                        </Label>
+                        <Input v-model="form.major" />
+                        <FormMessage v-if="form.errors.major" variant="error">
+                            {{ form.errors.major }}
                         </FormMessage>
                     </div>
                     <div class="flex flex-row-reverse justify-between">
                         <Button type="submit">Add</Button>
-                        <Link
-                            :href="
-                                route('admin.users.index', { _query: { type } })
-                            "
-                        >
+                        <Link :href="route('admin.dashboard')">
                             <Button type="button" variant="outline">
                                 Back
                             </Button>

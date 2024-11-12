@@ -19,6 +19,10 @@ import { PageProps } from "@/types";
 import { Link, usePage } from "@inertiajs/vue3";
 import { ArrowLeft, ArrowRight, Building, LogOut, Vote } from "lucide-vue-next";
 
+defineProps<{
+    organization: Organization;
+}>();
+
 const page = usePage<PageProps>();
 const user = page.props.auth.user;
 </script>
@@ -36,14 +40,16 @@ const user = page.props.auth.user;
                         Organisasi
                         <Building class="size-4" />
                     </CardDescription>
-                    <CardTitle class="font-extrabold"> HIMASIFO </CardTitle>
+                    <CardTitle class="text-xl">{{
+                        organization.name
+                    }}</CardTitle>
                 </CardHeader>
                 <CardHeader class="p-6">
                     <CardDescription class="flex items-center justify-between">
                         Surat Suara
                         <Vote class="size-4" />
                     </CardDescription>
-                    <CardTitle class="font-extrabold">65</CardTitle>
+                    <CardTitle class="text-xl">65</CardTitle>
                 </CardHeader>
             </div>
             <div class="w-full overflow-auto whitespace-nowrap">
@@ -75,7 +81,9 @@ const user = page.props.auth.user;
                     </TableBody>
                 </Table>
             </div>
-            <CardFooter class="p-6 flex items-center justify-between gap-4">
+            <CardFooter
+                class="px-6 py-2 flex items-center justify-between gap-4"
+            >
                 <Button variant="outline" class="w-full md:w-fit gap-1">
                     <ArrowLeft class="size-4" />
                     Sebelumnya

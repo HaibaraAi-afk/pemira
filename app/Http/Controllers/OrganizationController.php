@@ -23,7 +23,7 @@ class OrganizationController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render("admin/organizations/create");
     }
 
     /**
@@ -39,7 +39,10 @@ class OrganizationController extends Controller
      */
     public function show(Organization $organization)
     {
-        //
+        return Inertia::render("admin/organizations/show", [
+            "organization" => $organization,
+            "groups" => $organization->groups()->withCount("candidates")->get(),
+        ]);
     }
 
     /**

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -29,7 +29,6 @@ import {
 import { PageProps } from "@/types";
 import { Link, router, usePage } from "@inertiajs/vue3";
 import {
-    Building,
     Check,
     ChevronsUpDown,
     Flame,
@@ -62,44 +61,6 @@ const menu = {
         },
     ],
 };
-
-const _organizations: Organization[] = [
-    {
-        code: "BEM",
-        name: "BEM FASILKOM",
-        logo: "test",
-        is_public: true,
-        is_open: false,
-    },
-    {
-        code: "BLM",
-        name: "BLM FASILKOM",
-        logo: "test",
-        is_public: true,
-        is_open: false,
-    },
-    {
-        code: "20",
-        name: "HIMASIFO",
-        logo: "test",
-        is_public: true,
-        is_open: false,
-    },
-    {
-        code: "30",
-        name: "HIMASADA",
-        logo: "test",
-        is_public: true,
-        is_open: false,
-    },
-    {
-        code: "40",
-        name: "HIMABISDI",
-        logo: "test",
-        is_public: true,
-        is_open: false,
-    },
-];
 </script>
 
 <template>
@@ -148,20 +109,44 @@ const _organizations: Organization[] = [
                 <SidebarGroup>
                     <SidebarGroupLabel class="flex justify-between">
                         Organizations
-                        <Button size="icon" variant="ghost">
-                            <Plus class="size-4 text-muted-foreground" />
-                        </Button>
+                        <Link :href="route('admin.organizations.create')">
+                            <Button size="icon" variant="ghost">
+                                <Plus class="size-4 text-muted-foreground" />
+                            </Button>
+                        </Link>
                     </SidebarGroupLabel>
                     <SidebarMenu>
-                        <SidebarMenuItem v-for="organization in _organizations">
+                        <SidebarMenuItem
+                            v-for="organization in page.props.organizations"
+                        >
                             <SidebarMenuButton as-child>
                                 <Link
-                                    :href="route('admin.organizations.index')"
+                                    :href="
+                                        route('admin.organizations.show', {
+                                            organization: organization.id,
+                                        })
+                                    "
                                 >
-                                    <Building class="size-4" />
+                                    <Avatar class="size-6">
+                                        <AvatarImage
+                                            v-if="organization.logo"
+                                            :src="organization.logo"
+                                            :alt="organization.name"
+                                        />
+                                        <AvatarFallback>
+                                            {{ organization.name[0] }}
+                                        </AvatarFallback>
+                                    </Avatar>
                                     {{ organization.name }}
                                 </Link>
                             </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem
+                            v-if="!page.props.organizations?.length"
+                        >
+                            <div class="px-2 text-xs text-muted-foreground">
+                                No organizations yet
+                            </div>
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarGroup>

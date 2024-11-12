@@ -15,7 +15,7 @@ class AdminDashboardController extends Controller
         $voters = User::where("type", "voter")->count();
         $committees = User::where("type", "committee")->count();
         $admins = User::where("type", "admin")->count();
-        $organizations = Organization::all();
+        $organizations = Organization::orderBy("ordering")->get();
 
         return Inertia::render("admin/dashboard", [
             "whitelists" => $whitelists,

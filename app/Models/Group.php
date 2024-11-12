@@ -8,8 +8,8 @@ class Group extends Model
 {
     protected $fillable = [
         "organization_id",
-        "major",
         "year",
+        "major",
         "name",
         "ordering",
         "min_candidates",

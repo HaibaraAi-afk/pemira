@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class GroupController extends Controller
 {
@@ -19,9 +20,12 @@ class GroupController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Organization $organization)
     {
-        //
+        return Inertia::render("admin/organizations/groups/create", [
+            "organization" => $organization,
+            "new_ordering" => $organization->groups()->count() + 1,
+        ]);
     }
 
     /**
@@ -37,7 +41,9 @@ class GroupController extends Controller
      */
     public function show(Organization $organization, Group $group)
     {
-        //
+        return Inertia::render("admin/organizations/groups/show", [
+            "group" => $group->load("candidates"),
+        ]);
     }
 
     /**
