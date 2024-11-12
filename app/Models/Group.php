@@ -12,6 +12,7 @@ class Group extends Model
         "year",
         "name",
         "ordering",
+        "min_candidates",
     ];
 
     public function organization()
