@@ -1,5 +1,6 @@
 <script lang="ts">
 import Select from "@/components/Select.vue";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
 import { SelectItem } from "@/components/ui/select";
 import AdminLayout from "@/layouts/AdminLayout.vue";
@@ -110,7 +111,7 @@ const next = () => {
                         <TableRow>
                             <TableHead class="w-[25%]">Organization</TableHead>
                             <TableHead class="w-[25%]">NPM</TableHead>
-                            <TableHead class="w-[25%]">Name</TableHead>
+                            <TableHead class="w-[25%]">Profile</TableHead>
                             <TableHead class="w-[25%]"></TableHead>
                         </TableRow>
                     </TableHeader>
@@ -126,7 +127,20 @@ const next = () => {
                         <TableRow v-for="user in users.data">
                             <TableCell>{{ user.org_code }}</TableCell>
                             <TableCell>{{ user.npm }}</TableCell>
-                            <TableCell>{{ user.name }}</TableCell>
+                            <TableCell>
+                                <div class="flex items-center gap-2">
+                                    <Avatar class="size-6">
+                                        <AvatarImage
+                                            v-if="user.avatar"
+                                            :src="user.avatar"
+                                        />
+                                        <AvatarFallback>
+                                            {{ user.name[0] }}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    {{ user.name }}
+                                </div>
+                            </TableCell>
                             <TableCell class="flex justify-end gap-2">
                                 <Button
                                     size="icon"
