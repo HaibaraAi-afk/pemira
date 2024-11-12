@@ -40,11 +40,10 @@ const props = withDefaults(
 );
 
 const form = useForm({
+    type: props.type,
     npm: "",
     email: "",
     name: "",
-    type: props.type,
-    org_code: "",
 });
 </script>
 
@@ -78,9 +77,20 @@ const form = useForm({
             </CardHeader>
             <CardContent>
                 <form
-                    class="space-y-6"
+                    class="space-y-4"
                     @submit.prevent="form.post(route('admin.users.store'))"
                 >
+                    <div class="space-y-2">
+                        <Label>Type</Label>
+                        <Select v-model="form.type">
+                            <SelectItem value="admin">Admin</SelectItem>
+                            <SelectItem value="committee">Committee</SelectItem>
+                            <SelectItem value="voter">Voter</SelectItem>
+                        </Select>
+                        <FormMessage v-if="form.errors.type" variant="error">
+                            {{ form.errors.type }}
+                        </FormMessage>
+                    </div>
                     <div class="space-y-2">
                         <Label>NPM</Label>
                         <Input v-model="form.npm" autofocus />
@@ -100,27 +110,6 @@ const form = useForm({
                         <Input v-model="form.name" />
                         <FormMessage v-if="form.errors.name" variant="error">
                             {{ form.errors.name }}
-                        </FormMessage>
-                    </div>
-                    <div class="space-y-2">
-                        <Label>Type</Label>
-                        <Select v-model="form.type">
-                            <SelectItem value="admin">Admin</SelectItem>
-                            <SelectItem value="committee">Committee</SelectItem>
-                            <SelectItem value="voter">Voter</SelectItem>
-                        </Select>
-                        <FormMessage v-if="form.errors.type" variant="error">
-                            {{ form.errors.type }}
-                        </FormMessage>
-                    </div>
-                    <div class="space-y-2">
-                        <Label>Organization Code</Label>
-                        <Input v-model="form.org_code" />
-                        <FormMessage
-                            v-if="form.errors.org_code"
-                            variant="error"
-                        >
-                            {{ form.errors.org_code }}
                         </FormMessage>
                     </div>
                     <div class="flex flex-row-reverse justify-between">

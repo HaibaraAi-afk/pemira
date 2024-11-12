@@ -2,8 +2,9 @@ export interface User {
     id: number;
     npm: string;
     email: string;
+    year: string;
+    major: string;
     name: string;
-    org_code: string;
     type: "voter" | "committee" | "admin";
     avatar?: string;
     gen?: number;

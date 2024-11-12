@@ -55,16 +55,16 @@ const destroy = (user: User) => {
 };
 
 const prev = () => {
-    if (props.admin.users.prev_page_url) {
-        router.visit(props.admin.users.prev_page_url, {
+    if (props.users.prev_page_url) {
+        router.visit(props.users.prev_page_url, {
             data: { type: type.value },
         });
     }
 };
 
 const next = () => {
-    if (props.admin.users.next_page_url) {
-        router.visit(props.admin.users.next_page_url, {
+    if (props.users.next_page_url) {
+        router.visit(props.users.next_page_url, {
             data: { type: type.value },
         });
     }
@@ -111,23 +111,21 @@ const next = () => {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead class="w-[25%]">Organization</TableHead>
-                            <TableHead class="w-[25%]">NPM</TableHead>
-                            <TableHead class="w-[25%]">Profile</TableHead>
-                            <TableHead class="w-[25%]"></TableHead>
+                            <TableHead>NPM</TableHead>
+                            <TableHead>Name</TableHead>
+                            <TableHead></TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow v-if="!admin.users.data.length">
+                        <TableRow v-if="!users.data.length">
                             <TableCell
                                 class="text-center text-muted-foreground"
-                                colspan="4"
+                                colspan="3"
                             >
                                 No data yet
                             </TableCell>
                         </TableRow>
-                        <TableRow v-for="user in admin.users.data">
-                            <TableCell>{{ user.org_code }}</TableCell>
+                        <TableRow v-for="user in users.data">
                             <TableCell>{{ user.npm }}</TableCell>
                             <TableCell>
                                 <div class="flex items-center gap-2">
@@ -164,14 +162,14 @@ const next = () => {
                 </Table>
                 <div class="flex justify-end gap-2">
                     <Button
-                        :disabled="!admin.users.prev_page_url"
+                        :disabled="!users.prev_page_url"
                         variant="outline"
                         @click="prev"
                     >
                         Previous
                     </Button>
                     <Button
-                        :disabled="!admin.users.next_page_url"
+                        :disabled="!users.next_page_url"
                         variant="outline"
                         @click="next"
                     >

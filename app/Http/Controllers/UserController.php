@@ -42,20 +42,20 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'npm' => 'required',
-            'org_code' => 'required',
-            'type' => 'required|in:admin,committee,voter',
+            "type" => "required|in:admin,committee,voter",
+            "name" => "required",
+            "email" => "required",
+            "npm" => "required",
         ]);
 
+        $npm = $request->input("npm");
         $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'npm' => $request->input('npm'),
-            'org_code' => $request->input('org_code'),
-            'type' => $request->input('type'),
-            "gen" => substr($request->input("npm"), 0, 2),
+            "npm" => $npm,
+            "email" => $request->input("email"),
+            "year" => substr($npm, 0, 2),
+            "major" => substr($npm, 4, 2),
+            "name" => $request->input("name"),
+            "type" => $request->input("type"),
         ]);
 
         Whitelist::query()->firstOrCreate(["npm" => $request->input("npm")]);
@@ -86,19 +86,20 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'npm' => 'required',
-            'org_code' => 'required',
-            'type' => 'required|in:admin,committee,voter',
+            "type" => "required|in:admin,committee,voter",
+            "npm" => "required",
+            "email" => "required",
+            "name" => "required",
         ]);
 
+        $npm = $request->input("npm");
         $user->update([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'npm' => $request->input('npm'),
-            'org_code' => $request->input('org_code'),
-            'type' => $request->input('type')
+            "npm" => $npm,
+            "email" => $request->input("email"),
+            "year" => substr($npm, 0, 2),
+            "major" => substr($npm, 4, 2),
+            "name" => $request->input("name"),
+            "type" => $request->input("type"),
         ]);
 
         Whitelist::query()->firstOrCreate(["npm" => $request->input("npm")]);
