@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Flash from "@/components/Flash.vue";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -34,12 +35,7 @@ const page = usePage<PageProps>();
                         Masuk dengan Google
                     </Button>
                 </a>
-                <div
-                    v-if="page.props.flash"
-                    class="text-red-500 text-sm font-medium text-center text-pretty"
-                >
-                    {{ page.props.flash }}
-                </div>
+                <Flash />
             </CardContent>
             <CardFooter class="p-6 justify-center">
                 <CardDescription>

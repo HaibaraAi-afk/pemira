@@ -26,13 +26,15 @@ class AuthController extends Controller
         $domain = explode("@", $user->email)[1];
         if ($domain !== "student.upnjatim.ac.id") {
             return redirect(route("login"))
-                ->with("flash", "Oops.. harus menggunakan email mahasiswa UPN!");
+                ->with("flash.message", "Oops.. harus menggunakan email mahasiswa UPN!")
+                ->with("flash.type", "destructive");
         }
 
         $npm = explode("@", $user->email)[0];
         if (!Whitelist::query()->find($npm)) {
             return redirect(route("login"))
-                ->with("flash", "Maaf.. NPM kamu tidak terdaftar sebagai pemilih 😔");
+                ->with("flash.message", "Maaf.. NPM kamu tidak terdaftar sebagai pemilih 😔")
+                ->with("flash.type", "destructive");
         }
 
         $orgCode = substr($npm, 4, 2);

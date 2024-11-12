@@ -8,11 +8,16 @@ export interface User {
     avatar?: string;
 }
 
+interface Flash {
+    message: string;
+    type: "default" | "destructive";
+}
+
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>
 > = T & {
     auth: {
         user: User;
     };
-    flash?: string;
+    flash?: Flash;
 };
