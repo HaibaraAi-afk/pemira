@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('ballots', function (Blueprint $table) {
             $table->id();
-            $table->char("org_code", 5);
-            $table->foreign("org_code")
-                ->references("code")
-                ->on("organizations")
+            $table->foreignId("organization_id")
+                ->constrained()
                 ->restrictOnUpdate()
                 ->restrictOnDelete();
             $table->foreignId("user_id")

@@ -6,14 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Organization extends Model
 {
-    protected $primaryKey = "code";
-    public $incrementing = false;
-
     protected $fillable = [
-        "code",
+        "major",
         "name",
         "logo",
-        "is_public",
         "is_open",
     ];
 
@@ -27,20 +23,20 @@ class Organization extends Model
 
     public function groups()
     {
-        return $this->hasMany(Group::class, "org_code", "code");
+        return $this->hasMany(Group::class);
     }
 
     public function candidates()
     {
-        return $this->hasMany(Candidate::class, "org_code", "code");
+        return $this->hasMany(Candidate::class);
     }
 
     public function ballots()
     {
-        return $this->hasMany(Ballot::class, "org_code", "code");
+        return $this->hasMany(Ballot::class);
     }
 
-    public function verified()
+    public function verifiedBallots()
     {
         return $this->ballots->where("is_verified", true);
     }

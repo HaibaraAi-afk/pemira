@@ -9,12 +9,12 @@ class User extends Authenticatable
     protected $fillable = [
         "npm",
         "email",
+        "major",
+        "year",
         "name",
-        "org_code",
         "type",
         "google_id",
         "avatar",
-        "gen",
     ];
 
     public function ballots()

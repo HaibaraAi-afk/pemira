@@ -13,15 +13,14 @@ return new class extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->char("org_code", 5)->unique();
-            $table->foreign("org_code")
-                ->references("code")
-                ->on("organizations")
+            $table->foreignId("organization_id")
+                ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->char("major", 2)->nullable();
+            $table->char("year", 2)->nullable();
             $table->string("name");
             $table->integer("ordering");
-            $table->boolean("is_public")->default(false);
             $table->timestamps();
         });
     }

@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('organizations', function (Blueprint $table) {
-            $table->char("code", 5)->primary();
+            $table->id();
+            $table->char("major", 2)->nullable();
             $table->string("name");
             $table->string("logo");
-            $table->boolean("is_public")->default(false);
             $table->boolean("is_open")->default(false);
             $table->timestamps();
         });

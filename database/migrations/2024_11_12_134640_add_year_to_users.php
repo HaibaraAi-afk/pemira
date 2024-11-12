@@ -13,9 +13,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table("users", function (Blueprint $table) {
-            $table->char("gen", 5);
+            $table->char("year", 2);
         });
-        DB::update("update users set gen = substring(npm, 0, 2)");
+        DB::update("update users set year = substring(npm, 0, 2)");
     }
 
     /**
@@ -24,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table("users", function (Blueprint $table) {
-            $table->dropColumn("gen");
+            $table->dropColumn("year");
         });
     }
 };

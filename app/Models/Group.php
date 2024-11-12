@@ -7,22 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Group extends Model
 {
     protected $fillable = [
-        "org_code",
+        "organization_id",
+        "major",
+        "year",
         "name",
         "ordering",
-        "is_public",
     ];
-
-    protected function casts()
-    {
-        return [
-            "is_public" => "boolean",
-        ];
-    }
 
     public function organization()
     {
-        return $this->belongsTo(Organization::class, "org_code", "code");
+        return $this->belongsTo(Organization::class);
     }
 
     public function candidates()

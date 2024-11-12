@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class BallotDetail extends Model
 {
     protected $fillable = [
-        "org_code",
+        "organization_id",
         "group_id",
         "ballot_id",
         "candidate_id",
@@ -15,7 +15,7 @@ class BallotDetail extends Model
 
     public function organization()
     {
-        return $this->belongsTo(Organization::class, "org_code", "code");
+        return $this->belongsTo(Organization::class);
     }
 
     public function group()

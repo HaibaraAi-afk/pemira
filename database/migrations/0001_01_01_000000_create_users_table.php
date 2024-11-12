@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->char("npm", 11)->unique();
-            $table->string('email')->unique();
-            $table->string('name');
-            $table->char("org_code", 5)->nullable();
+            $table->string("email")->unique();
+            $table->char("major", 2);
+            $table->string("name");
             $table->enum("type", ["voter", "committee", "admin"])
                 ->default("voter");
             $table->timestamps();
