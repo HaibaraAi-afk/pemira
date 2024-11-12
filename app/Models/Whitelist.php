@@ -12,8 +12,9 @@ class Whitelist extends Model
     protected $fillable = [
         "npm",
     ];
+
     public function user()
     {
-        return $this->belongsTo(User::class, 'npm', 'npm');
+        return $this->belongsTo(User::class, "npm", "npm");
     }
 }

@@ -16,7 +16,6 @@ class Organization extends Model
     protected function casts()
     {
         return [
-            "is_public" => "boolean",
             "is_open" => "boolean",
         ];
     }
