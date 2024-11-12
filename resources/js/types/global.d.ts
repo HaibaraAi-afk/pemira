@@ -18,6 +18,10 @@ declare global {
         is_public: boolean;
         is_open: boolean;
     }
+
+    interface Whitelist {
+        npm: string;
+    }
 }
 
 declare module "vue" {

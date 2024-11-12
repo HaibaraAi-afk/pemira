@@ -34,6 +34,12 @@ Route::middleware("auth")->group(function () {
         })->name("organizations.test");
 
         Route::resource("users", UserController::class);
+
+        Route::post("/whitelists/validate", [WhitelistController::class, "validate"])
+            ->name("whitelists.validate");
+        Route::post("/whitelists/single", [WhitelistController::class, "storeSingle"])
+            ->name("whitelists.store.single");
+
         Route::resource("whitelists", WhitelistController::class);
         Route::resource("organizations", OrganizationController::class);
         Route::resource("organizations.groups", GroupController::class);

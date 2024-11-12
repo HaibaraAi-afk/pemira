@@ -13,9 +13,7 @@ class WhitelistController extends Controller
      */
     public function index()
     {
-        return Inertia::render("admin/whitelists", [
-            "whitelists" => Whitelist::all(),
-        ]);
+        return Inertia::render("admin/whitelists");
     }
 
     /**
@@ -31,7 +29,6 @@ class WhitelistController extends Controller
      */
     public function store(Request $request)
     {
-        // dd(Whitelist::query()->with('user')->get());
         $request->validate([
             'whitelists' => 'required',
         ]);
@@ -45,15 +42,27 @@ class WhitelistController extends Controller
                 'npm' => $npm,
             ]);
         }
-        return response()->json(['whitelist' => $whitelist], 201);
+        return redirect(route("whitelists.index"))
+            ->with("flash.message", "Whitelist updated");
+    }
+
+    public function storeSingle(Request $request)
+    {
+        $request->validate(["npm" => "required"]);
+        Whitelist::query()->firstOrCreate(["npm" => $request->npm]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Whitelist $whitelist)
+    public function show(string $whitelist)
     {
-        return response()->json($whitelist, 200);
+        Whitelist::findOrFail($whitelist);
+    }
+
+    public function validate(Request $request)
+    {
+        $request->validate(["npm" => "required|exists:whitelists,npm"]);
     }
 
     /**

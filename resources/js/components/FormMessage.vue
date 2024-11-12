@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 withDefaults(
     defineProps<{
-        variant?: "default" | "error";
+        variant?: "default" | "error" | "success";
     }>(),
     {
         variant: "default",
@@ -14,6 +14,7 @@ withDefaults(
         :class="{
             'text-muted-foreground': variant === 'default',
             'text-destructive': variant === 'error',
+            'text-green-600': variant === 'success',
         }"
         class="text-sm"
     >
