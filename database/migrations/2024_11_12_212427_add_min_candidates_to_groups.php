@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('groups', function (Blueprint $table) {
             $table->unsignedInteger("min_candidates")
                 ->default(1)
-                ->after("ordering");
+                ->after("name");
         });
     }
 
