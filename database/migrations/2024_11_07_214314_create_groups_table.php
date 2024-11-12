@@ -17,8 +17,8 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->char("major", 2)->nullable();
             $table->char("year", 2)->nullable();
+            $table->char("major", 2)->nullable();
             $table->string("name");
             $table->integer("ordering");
             $table->timestamps();
