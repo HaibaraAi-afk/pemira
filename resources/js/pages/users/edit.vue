@@ -1,5 +1,7 @@
 <script lang="ts">
 import AdminLayout from "@/layouts/AdminLayout.vue";
+import { User } from "@/types";
+import { Link, useForm } from "@inertiajs/vue3";
 
 export default {
     layout: AdminLayout,
@@ -8,6 +10,7 @@ export default {
 
 <script lang="ts" setup>
 import FormMessage from "@/components/FormMessage.vue";
+import Select from "@/components/Select.vue";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -26,9 +29,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import UserTypeSelect from "@/components/UserTypeSelect.vue";
-import { User } from "@/types";
-import { Link, useForm } from "@inertiajs/vue3";
+import { SelectItem } from "@/components/ui/select";
 
 const props = defineProps<{
     user: User;
@@ -48,7 +49,13 @@ const form = useForm({
         <Breadcrumb>
             <BreadcrumbList>
                 <BreadcrumbItem class="hidden md:block">
-                    <BreadcrumbLink :href="route('users.index')">
+                    <BreadcrumbLink
+                        :href="
+                            route('users.index', {
+                                _query: { type: user.type },
+                            })
+                        "
+                    >
                         Users
                     </BreadcrumbLink>
                 </BreadcrumbItem>
@@ -69,9 +76,7 @@ const form = useForm({
                 <form
                     class="space-y-6"
                     @submit.prevent="
-                        form.post(
-                            route('users.update', { user: props.user.id })
-                        )
+                        form.put(route('users.update', { user: user.id }))
                     "
                 >
                     <div class="space-y-2">
@@ -97,7 +102,11 @@ const form = useForm({
                     </div>
                     <div class="space-y-2">
                         <Label>Type</Label>
-                        <UserTypeSelect v-model="form.type" />
+                        <Select v-model="form.type">
+                            <SelectItem value="admin">Admin</SelectItem>
+                            <SelectItem value="committee">Committee</SelectItem>
+                            <SelectItem value="voter">Voter</SelectItem>
+                        </Select>
                         <FormMessage v-if="form.errors.type" variant="error">
                             {{ form.errors.type }}
                         </FormMessage>
@@ -113,8 +122,14 @@ const form = useForm({
                         </FormMessage>
                     </div>
                     <div class="flex flex-row-reverse justify-between">
-                        <Button type="submit">Submit</Button>
-                        <Link :href="route('users.index')">
+                        <Button type="submit">Save</Button>
+                        <Link
+                            :href="
+                                route('users.index', {
+                                    _query: { type: user.type },
+                                })
+                            "
+                        >
                             <Button type="button" variant="outline">
                                 Back
                             </Button>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Whitelist;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -12,10 +13,15 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $type = $request->input("type", "admin");
         return Inertia::render("admin/users", [
-            "users" => User::query()->where("type", "committee")->get(),
+            "type" => $type,
+            "users" => User::query()
+                ->where("type", $type)
+                ->orderBy("npm")
+                ->cursorPaginate(10),
         ]);
     }
 
@@ -23,9 +29,11 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        return Inertia::render("users/create");
+        return Inertia::render("users/create", [
+            "type" => $request->input("type", "admin"),
+        ]);
     }
 
     /**
@@ -38,7 +46,7 @@ class UserController extends Controller
             'email' => 'required',
             'npm' => 'required',
             'org_code' => 'required',
-            'type' => 'required',
+            'type' => 'required|in:admin,committee,voter',
         ]);
 
         $user = User::create([
@@ -46,10 +54,14 @@ class UserController extends Controller
             'email' => $request->input('email'),
             'npm' => $request->input('npm'),
             'org_code' => $request->input('org_code'),
-            'type' => $request->input('type')
+            'type' => $request->input('type'),
+            "gen" => substr($request->input("npm"), 0, 2),
         ]);
 
-        return response()->json(['user' => $user], 201);
+        Whitelist::query()->firstOrCreate(["npm" => $request->input("npm")]);
+
+        return redirect(route("users.index", ["type" => $user->type]))
+            ->with("flash.message", "User has been added.");
     }
 
     /**
@@ -57,15 +69,15 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return response()->json($user, 200);
+        // 
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        return Inertia::render("users/edit", ["user" => $user]);
     }
 
     /**
@@ -78,7 +90,7 @@ class UserController extends Controller
             'email' => 'required',
             'npm' => 'required',
             'org_code' => 'required',
-            'type' => 'required',
+            'type' => 'required|in:admin,committee,voter',
         ]);
 
         $user->update([
@@ -89,7 +101,10 @@ class UserController extends Controller
             'type' => $request->input('type')
         ]);
 
-        return response()->json(['message' => 'User Berhasil Diupdate']);
+        Whitelist::query()->firstOrCreate(["npm" => $request->input("npm")]);
+
+        return redirect(route("users.index", ["type" => $user->type]))
+            ->with("flash.message", "User has been updated.");
     }
 
     /**
@@ -98,7 +113,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-
-        return response()->json(['message' => 'User Berhasil Dihapus'], 200);
+        return redirect(route("users.index", ["type" => $user->type]))
+            ->with("flash.message", "User {$user->name} has been deleted.");
     }
 }

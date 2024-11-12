@@ -6,6 +6,7 @@ export interface User {
     org_code: string;
     type: "voter" | "committee" | "admin";
     avatar?: string;
+    gen?: number;
 }
 
 interface Flash {

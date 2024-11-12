@@ -9,6 +9,7 @@ export default {
 
 <script lang="ts" setup>
 import FormMessage from "@/components/FormMessage.vue";
+import Select from "@/components/Select.vue";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -27,13 +28,24 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import UserTypeSelect from "@/components/UserTypeSelect.vue";
+import { SelectItem } from "@/components/ui/select";
+
+const props = withDefaults(
+    defineProps<{
+        type?: string;
+    }>(),
+    {
+        type: "admin",
+    }
+);
+
+console.log(props.type);
 
 const form = useForm({
     npm: "",
     email: "",
     name: "",
-    type: undefined,
+    type: props.type,
     org_code: "",
 });
 </script>
@@ -43,7 +55,13 @@ const form = useForm({
         <Breadcrumb>
             <BreadcrumbList>
                 <BreadcrumbItem class="hidden md:block">
-                    <BreadcrumbLink :href="route('users.index')">
+                    <BreadcrumbLink
+                        :href="
+                            route('users.index', {
+                                _query: { type },
+                            })
+                        "
+                    >
                         Users
                     </BreadcrumbLink>
                 </BreadcrumbItem>
@@ -88,7 +106,11 @@ const form = useForm({
                     </div>
                     <div class="space-y-2">
                         <Label>Type</Label>
-                        <UserTypeSelect v-model="form.type" />
+                        <Select v-model="form.type">
+                            <SelectItem value="admin">Admin</SelectItem>
+                            <SelectItem value="committee">Committee</SelectItem>
+                            <SelectItem value="voter">Voter</SelectItem>
+                        </Select>
                         <FormMessage v-if="form.errors.type" variant="error">
                             {{ form.errors.type }}
                         </FormMessage>
@@ -104,8 +126,10 @@ const form = useForm({
                         </FormMessage>
                     </div>
                     <div class="flex flex-row-reverse justify-between">
-                        <Button type="submit">Submit</Button>
-                        <Link :href="route('users.index')">
+                        <Button type="submit">Add</Button>
+                        <Link
+                            :href="route('users.index', { _query: { type } })"
+                        >
                             <Button type="button" variant="outline">
                                 Back
                             </Button>

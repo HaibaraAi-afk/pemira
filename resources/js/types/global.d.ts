@@ -11,6 +11,16 @@ declare global {
     /* eslint-disable no-var */
     var route: typeof ziggyRoute;
 
+    interface Pagination<T> {
+        data: T[];
+        next_cursor: null;
+        next_page_url: string | null;
+        path: string;
+        per_page: number;
+        prev_cursor: null;
+        prev_page_url: string | null;
+    }
+
     interface Organization {
         code: string;
         name: string;

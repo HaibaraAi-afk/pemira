@@ -1,5 +1,10 @@
 <script lang="ts">
+import Select from "@/components/Select.vue";
+import { Label } from "@/components/ui/label";
+import { SelectItem } from "@/components/ui/select";
 import AdminLayout from "@/layouts/AdminLayout.vue";
+import { Edit, Trash2 } from "lucide-vue-next";
+import { ref } from "vue";
 
 export default {
     layout: AdminLayout,
@@ -14,13 +19,7 @@ import {
     BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
     Table,
     TableBody,
@@ -30,11 +29,43 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { User } from "@/types";
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 
-defineProps<{
-    users: User[];
-}>();
+const props = withDefaults(
+    defineProps<{
+        users: Pagination<User>;
+        type?: string;
+    }>(),
+    {
+        type: "admin",
+    }
+);
+
+const type = ref(props.type);
+
+const edit = (user: User) => {
+    router.visit(route("users.edit", { user, _query: { type: type.value } }));
+};
+
+const destroy = (user: User) => {
+    router.delete(route("users.destroy", { user: user.id }));
+};
+
+const prev = () => {
+    if (props.users.prev_page_url) {
+        router.visit(props.users.prev_page_url, {
+            data: { type: type.value },
+        });
+    }
+};
+
+const next = () => {
+    if (props.users.next_page_url) {
+        router.visit(props.users.next_page_url, {
+            data: { type: type.value },
+        });
+    }
+};
 </script>
 
 <template>
@@ -49,43 +80,88 @@ defineProps<{
     </Teleport>
     <div class="flex-1">
         <Card>
-            <CardHeader>
-                <div class="flex justify-between gap-4">
-                    <div class="space-y-1.5">
-                        <CardTitle>Users</CardTitle>
-                        <CardDescription>
-                            Admin and committee users
-                        </CardDescription>
+            <CardHeader class="flex-row justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <Label>Type:</Label>
+                    <div class="w-32">
+                        <Select
+                            v-model="type"
+                            @change="
+                                router.visit(route('users.index'), {
+                                    data: { type },
+                                })
+                            "
+                        >
+                            <SelectItem value="admin">Admin</SelectItem>
+                            <SelectItem value="committee">
+                                Committee
+                            </SelectItem>
+                            <SelectItem value="voter">Voter</SelectItem>
+                        </Select>
                     </div>
-                    <Link :href="route('users.create')">
-                        <Button>Add New</Button>
-                    </Link>
                 </div>
+                <Link :href="route('users.create', { _query: { type } })">
+                    <Button>Add New</Button>
+                </Link>
             </CardHeader>
-            <CardContent>
+            <CardContent class="space-y-4">
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead class="w-[150px]">Type</TableHead>
-                            <TableHead>Organization</TableHead>
-                            <TableHead>NPM</TableHead>
-                            <TableHead>Name</TableHead>
+                            <TableHead class="w-[25%]">Organization</TableHead>
+                            <TableHead class="w-[25%]">NPM</TableHead>
+                            <TableHead class="w-[25%]">Name</TableHead>
+                            <TableHead class="w-[25%]"></TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow v-if="!users.length">
-                            <TableCell class="text-center" colspan="4">
+                        <TableRow v-if="!users.data.length">
+                            <TableCell
+                                class="text-center text-muted-foreground"
+                                colspan="4"
+                            >
                                 No data yet
                             </TableCell>
                         </TableRow>
-                        <TableRow v-for="user in users" :key="user.id">
-                            <TableCell>{{ user.type.toUpperCase() }}</TableCell>
+                        <TableRow v-for="user in users.data">
                             <TableCell>{{ user.org_code }}</TableCell>
                             <TableCell>{{ user.npm }}</TableCell>
                             <TableCell>{{ user.name }}</TableCell>
+                            <TableCell class="flex justify-end gap-2">
+                                <Button
+                                    size="icon"
+                                    variant="outline"
+                                    @click="edit(user)"
+                                >
+                                    <Edit class="size-4" />
+                                </Button>
+                                <Button
+                                    size="icon"
+                                    variant="destructive"
+                                    @click="destroy(user)"
+                                >
+                                    <Trash2 class="size-4" />
+                                </Button>
+                            </TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
+                <div class="flex justify-end gap-2">
+                    <Button
+                        :disabled="!users.prev_page_url"
+                        variant="outline"
+                        @click="prev"
+                    >
+                        Previous
+                    </Button>
+                    <Button
+                        :disabled="!users.next_page_url"
+                        variant="outline"
+                        @click="next"
+                    >
+                        Next
+                    </Button>
+                </div>
             </CardContent>
         </Card>
     </div>
