@@ -26,7 +26,7 @@ class AuthController extends Controller
         $domain = explode("@", $user->email)[1];
         if ($domain !== "student.upnjatim.ac.id") {
             return redirect(route("login"))
-                ->with("flash.message", "Oops.. harus menggunakan email mahasiswa UPN!")
+                ->with("flash.message", "Oops.. kamu harus menggunakan email mahasiswa UPN!")
                 ->with("flash.type", "destructive");
         }
 
