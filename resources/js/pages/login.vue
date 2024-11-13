@@ -9,7 +9,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { PageProps } from "@/types";
 import { Icon } from "@iconify/vue";
 import { usePage } from "@inertiajs/vue3";
@@ -25,7 +24,12 @@ const page = usePage<PageProps>();
         />
         <Card class="max-w-sm w-full">
             <CardHeader class="border-b text-center text-pretty">
-                <Skeleton class="size-32 mx-auto border rounded-full mb-2" />
+                <!-- <Skeleton class="size-32 mx-auto border rounded-full mb-2" /> -->
+                <img
+                    src="/logo.webp"
+                    alt="Logo PEMIRA Fasilkom 2025"
+                    class="size-32 mx-auto mb-2"
+                />
                 <CardTitle class="text-3xl font-extrabold">PEMIRA</CardTitle>
                 <CardTitle>Fakultas Ilmu Komputer 2025</CardTitle>
                 <CardDescription>

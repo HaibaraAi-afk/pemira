@@ -37,14 +37,14 @@ class AuthController extends Controller
                 ->with("flash.type", "destructive");
         }
 
-        $orgCode = substr($npm, 4, 2);
         $user = User::query()->updateOrCreate([
             "npm" => $npm,
         ], [
             "npm" => $npm,
             "email" => $user->getEmail(),
+            "year" => substr($npm, 0, 2),
+            "major" => substr($npm, 2, 2),
             "name" => $user->getName(),
-            "org_code" => $orgCode,
             "google_id" => $user->getId(),
             "avatar" => $user->getAvatar(),
         ]);

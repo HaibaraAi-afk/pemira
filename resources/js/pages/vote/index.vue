@@ -31,6 +31,7 @@ const isOpen = ref(false);
                             v-if="user.avatar"
                             :alt="user.name"
                             :src="user.avatar"
+                            referrerpolicy="no-referrer"
                         />
                     </Avatar>
                     <div>
