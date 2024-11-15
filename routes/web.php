@@ -3,13 +3,14 @@
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CandidateController;
-use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrganizationDashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\WhitelistController;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\ComitteeMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -25,7 +26,7 @@ Route::middleware("auth")->group(function () {
     Route::get("/", [VoteController::class, "index"])->name("index");
     Route::get("/logout", [AuthController::class, "logout"])->name("logout");
 
-    Route::prefix("admin")->as("admin.")->group(function () {
+    Route::prefix("admin")->as("admin.")->middleware(AdminMiddleware::class)->group(function () {
         Route::get("/", [AdminDashboardController::class, "index"])
             ->name("dashboard");
 
@@ -45,7 +46,7 @@ Route::middleware("auth")->group(function () {
         );
     });
 
-    Route::prefix("organizations/{organization}")->group(function () {
+    Route::prefix("organizations/{organization}")->middleware(ComitteeMiddleware::class)->group(function () {
         Route::get("/", [OrganizationDashboardController::class, "dashboard"])
             ->name("organizations.dashboard");
     });
