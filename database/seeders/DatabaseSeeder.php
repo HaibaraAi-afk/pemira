@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             WhitelistSeeder::class,
             UserSeeder::class,
+            OrganizationSeeder::class,
         ]);
     }
 }
