@@ -21,6 +21,11 @@ class Organization extends Model
         ];
     }
 
+    public function firstGroup()
+    {
+        return $this->groups->where("ordering", 1)->first();
+    }
+
     public function groups()
     {
         return $this->hasMany(Group::class)->orderBy("ordering");

@@ -10,6 +10,7 @@ use App\Http\Controllers\OrganizationDashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\WhitelistController;
+use App\Http\Middleware\CommitteeMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -23,6 +24,16 @@ Route::middleware("guest")->group(function () {
 
 Route::middleware("auth")->group(function () {
     Route::get("/", [VoteController::class, "index"])->name("index");
+
+    Route::get("/ktm", [VoteController::class, "ktm"])->name("ktm");
+    Route::post("/ktm", [VoteController::class, "storeKtm"])
+        ->name("ktm.store");
+
+    Route::get("/verification", [VoteController::class, "verification"])
+        ->name("verification");
+    Route::post("/verification", [VoteController::class, "storeVerification"])
+        ->name("verification.store");
+
     Route::get("/logout", [AuthController::class, "logout"])->name("logout");
 
     Route::prefix("admin")->as("admin.")->group(function () {
@@ -48,5 +59,20 @@ Route::middleware("auth")->group(function () {
     Route::prefix("organizations/{organization}")->group(function () {
         Route::get("/", [OrganizationDashboardController::class, "dashboard"])
             ->name("organizations.dashboard");
+    });
+
+    Route::prefix("/vote/{organization}")->group(function () {
+        Route::get("/", [VoteController::class, "organization"])
+            ->name("vote.organization");
+
+        Route::get("/result", [VoteController::class, "result"])
+            ->name("vote.result");
+        Route::post("/result", [VoteController::class, "confirmResult"])
+            ->name("vote.result.confirm");
+
+        Route::get("/{group}", [VoteController::class, "group"])
+            ->name("vote.group");
+        Route::post("/{group}", [VoteController::class, "storeGroup"])
+            ->name("vote.group.store");
     });
 });

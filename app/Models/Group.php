@@ -34,4 +34,11 @@ class Group extends Model
     {
         return $this->ballots->where("is_verified", true);
     }
+
+    public function next()
+    {
+        return $this->organization->groups
+            ->where("ordering", ">", $this->ordering)
+            ->first();
+    }
 }
