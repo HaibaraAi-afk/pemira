@@ -11,13 +11,21 @@ class VoteController extends Controller
 {
     public function index()
     {
-        // Cek apakah user sudah punya Ballot
-        // - Jika belum, buat Ballot kosong
         return Inertia::render("vote/index");
     }
 
-    public function organization(Organization $organization)
+    public function organization(Request $request, Organization $organization)
     {
+        // Cek apakah user sudah punya Ballot
+        // - Jika belum, buat Ballot kosong
+
+        // Kalau butuh user pakai ini
+        // $user = User::find($request->user_id);
+        // return $user;
+
+        // Kalau sudah selesai diganti ini
+        // $user = $request->user();
+
         // Check apakah user sudah punya Ballot
         // Jika sudah punya Ballot
         // - Ambil data Ballot dan BallotDetail paling akhir
@@ -39,6 +47,7 @@ class VoteController extends Controller
         // Validasi parameter ktm
         // Simpan gambar KTM ke storage folder /ktms
         // Simpan path gambar KTM ke ballot user
+        // $request->user()->ballot->update(["ktm" => $pathKtm]);
 
         // return redirect()->route("vote.verification");
     }
@@ -70,11 +79,11 @@ class VoteController extends Controller
         Group $group
     ) {
         // Validasi parameter candidate_id
-        // Simpan candidate_id ke ballot user
         // Tambahkan data BallotDetail dengan data tersebut
 
+        // $nextGroup = $group->next();
         // check if there is next group
-        // return redirect()->route("vote.group", $group->next());
+        // return redirect()->route("vote.group", ["group" => $nextGroup]);
         // if there is no next group
         // return redirect()->route("vote.result");
     }
@@ -87,6 +96,6 @@ class VoteController extends Controller
     public function confirmResult(Request $request, Organization $organization)
     {
         // Update ballot user is_confirmed menjadi true dan confirmed_at menjadi now()
-        // return redirect()->route("vote.index");
+        // return redirect()->route("index");
     }
 }

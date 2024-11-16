@@ -17,8 +17,8 @@ class User extends Authenticatable
         "avatar",
     ];
 
-    public function ballots()
+    public function ballot()
     {
-        return $this->hasMany(Ballot::class);
+        return $this->hasOne(Ballot::class);
     }
 }
