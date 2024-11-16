@@ -11,7 +11,6 @@ use App\Http\Controllers\VoteController;
 use App\Http\Controllers\WhitelistController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ComitteeMiddleware;
-use App\Http\Middleware\CommitteeMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
