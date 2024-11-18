@@ -18,6 +18,11 @@ class VoteController extends Controller
     {
         // Cek apakah user sudah punya Ballot
         // - Jika belum, buat Ballot kosong
+        $user = $request->user();
+        $ballot = $user->ballot;
+        if (!$ballot) {
+            $ballot = $user->ballots()->create();
+        }
 
         // Kalau butuh user pakai ini
         // $user = User::find($request->user_id);
@@ -45,11 +50,27 @@ class VoteController extends Controller
     public function storeKtm(Request $request, Organization $organization)
     {
         // Validasi parameter ktm
-        // Simpan gambar KTM ke storage folder /ktms
-        // Simpan path gambar KTM ke ballot user
-        // $request->user()->ballot->update(["ktm" => $pathKtm]);
+        $request->validate([
+            'ktm' => [
+                'required',
+                'npm',
+                'image',
+                'mimes:png,jpg,jpeg',
 
-        // return redirect()->route("vote.verification");
+            ]
+        ]);
+        // Ambil user dari request
+        $user = $request->user();
+        // Simpan gambar KTM ke storage folder /ktms
+        $pathKtm = $request->file("ktm")->store("ktms");
+        // Simpan path gambar KTM ke ballot user
+        $user->ballot->update([
+            "ktm" => $pathKtm,
+            'ktm_is_verified' => true,
+            'ktm_verified_at' => now(),
+        ]);
+
+        return redirect()->route("vote.verification");
     }
 
     public function verification(Request $request, Organization $organization)
@@ -62,10 +83,21 @@ class VoteController extends Controller
         Organization $organization
     ) {
         // Validasi parameter verification
+        // Ambil user dari request
+        $request->validate([
+            'verification' => [
+                'required',
+                'image',
+                'mimes:png,jpg,jpeg',
+            ]
+        ]);
+        $user = $request->user();
         // Simpan verification ke storage folder /verifications
+        $pathVerification = $request->file("verification")->store("verifications");
         // Simpan path gambar verification ke ballot user
+        $request->user()->ballot->update(["verification" => $pathVerification]);
 
-        // return redirect()->route("vote.group", $organization->groups->first());
+        return redirect()->route("vote.group", $organization->groups->first());
     }
 
     public function group(Organization $organization, Group $group)
