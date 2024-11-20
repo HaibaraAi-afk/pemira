@@ -6,6 +6,7 @@ use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrganizationDashboardController;
+use App\Http\Controllers\RecapController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\WhitelistController;
@@ -68,6 +69,17 @@ Route::middleware("auth")->group(function () {
     Route::prefix("organizations/{organization}")->middleware(ComitteeMiddleware::class)->group(function () {
         Route::get("/", [OrganizationDashboardController::class, "dashboard"])
             ->name("organizations.dashboard");
+
+        Route::prefix("/recap")->group(function () {
+            Route::get("/", [RecapController::class, "index"])
+                ->name("organizations.recap");
+            Route::post("/start", [RecapController::class, "start"])
+                ->name("organizations.recap.start");
+            Route::get("/ballots", [RecapController::class, "ballots"])
+                ->name("organizations.recap.ballots");
+            Route::get("/result", [RecapController::class, "result"])
+                ->name("organizations.recap.result");
+        });
     });
 
     Route::prefix("/vote/{organization}")->group(function () {
