@@ -44,7 +44,7 @@ class VoteController extends Controller
             }
             // - Jika sudah ada data BallotDetail
             //   - Ambil data group selanjutnya dari BallotDetail paling akhir
-            $lastBallotDetail = $ballot->ballotDetails->last();
+            $lastBallotDetail = $ballot->details()->latest()();
             $nextGroup = $lastBallotDetail->group->next();
             //   - Jika ada group selanjutnya, redirect ke route("vote.group") dengan parameter group tersebut
             if ($nextGroup) {
@@ -127,15 +127,21 @@ class VoteController extends Controller
             'candidate_id' => 'required|exists:candidates,id',
         ]);
         // Tambahkan data BallotDetail dengan data tersebut
-        $ballotDetail = $request->user()->ballot->ballotDetails()->create([
+        $ballotDetail = $request->user()->ballot->details()->create([
+            'organization_id' => $organization->id,
             'group_id' => $group->id,
+            'ballot_id' => $request->user()->ballot->id,
             'candidate_id' => $request->input('candidate_id'),
         ]);
         $nextGroup = $group->next();
         // check if there is next group
-        return redirect()->route("vote.group", ["group" => $nextGroup]);
+        if ($nextGroup) {
+            return redirect()->route("vote.group", ["group" => $nextGroup]);
+        }
         // if there is no next group
-        return redirect()->route("vote.result");
+        if (!$nextGroup) {
+            return redirect()->route("vote.result.confirm");
+        }
     }
 
     public function result(Organization $organization)
