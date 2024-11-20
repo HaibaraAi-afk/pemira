@@ -28,4 +28,9 @@ class Ballot extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function details()
+    {
+        return $this->hasMany(BallotDetail::class);
+    }
 }
