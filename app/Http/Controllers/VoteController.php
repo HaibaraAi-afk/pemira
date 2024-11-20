@@ -21,7 +21,7 @@ class VoteController extends Controller
         $user = $request->user();
         $ballot = $user->ballot;
         if (!$ballot) {
-            $ballot = $user->ballots()->create();
+            $ballot = $user->ballot()->create();
         }
 
         // Kalau butuh user pakai ini
@@ -33,13 +33,26 @@ class VoteController extends Controller
 
         // Check apakah user sudah punya Ballot
         // Jika sudah punya Ballot
-        // - Ambil data Ballot dan BallotDetail paling akhir
-        // - Jika belum ada data BallotDetail, redirect ke route("vote.group")
-        //   dengan parameter group pertama dari organization ($oganization->firstGroup())
-        // - Jika sudah ada data BallotDetail
-        //   - Ambil data group selanjutnya dari BallotDetail paling akhir
-        //   - Jika ada group selanjutnya, redirect ke route("vote.group") dengan parameter group tersebut
-        //   - Jika tidak, redirect ke route("vote.index")
+        if ($ballot) {
+            // Ambil data BallotDetail paling akhir
+            // Jika tidak, redirect ke route("vote.index")
+            // - Ambil data Ballot dan BallotDetail paling akhir
+            // - Jika belum ada data BallotDetail, redirect ke route("vote.group")
+            //   dengan parameter group pertama dari organization ($oganization->firstGroup())
+            if ($ballot->ballotDetails->isEmpty()) {
+                return redirect()->route("vote.group", $organization->groups->first());
+            }
+            // - Jika sudah ada data BallotDetail
+            //   - Ambil data group selanjutnya dari BallotDetail paling akhir
+            $lastBallotDetail = $ballot->ballotDetails->last();
+            $nextGroup = $lastBallotDetail->group->next();
+            //   - Jika ada group selanjutnya, redirect ke route("vote.group") dengan parameter group tersebut
+            if ($nextGroup) {
+                return redirect()->route("vote.group", $nextGroup);
+            }
+            //   - Jika tidak, redirect ke route("vote.index")
+            return redirect()->route("vote.index");
+        }
     }
 
     public function ktm(Request $request, Organization $organization)
@@ -53,7 +66,6 @@ class VoteController extends Controller
         $request->validate([
             'ktm' => [
                 'required',
-                'npm',
                 'image',
                 'mimes:png,jpg,jpeg',
 
@@ -111,13 +123,19 @@ class VoteController extends Controller
         Group $group
     ) {
         // Validasi parameter candidate_id
+        $request->validate([
+            'candidate_id' => 'required|exists:candidates,id',
+        ]);
         // Tambahkan data BallotDetail dengan data tersebut
-
-        // $nextGroup = $group->next();
+        $ballotDetail = $request->user()->ballot->ballotDetails()->create([
+            'group_id' => $group->id,
+            'candidate_id' => $request->input('candidate_id'),
+        ]);
+        $nextGroup = $group->next();
         // check if there is next group
-        // return redirect()->route("vote.group", ["group" => $nextGroup]);
+        return redirect()->route("vote.group", ["group" => $nextGroup]);
         // if there is no next group
-        // return redirect()->route("vote.result");
+        return redirect()->route("vote.result");
     }
 
     public function result(Organization $organization)
@@ -128,6 +146,10 @@ class VoteController extends Controller
     public function confirmResult(Request $request, Organization $organization)
     {
         // Update ballot user is_confirmed menjadi true dan confirmed_at menjadi now()
-        // return redirect()->route("index");
+        $request->user()->ballot->update([
+            'is_confirmed' => true,
+            'confirmed_at' => now(),
+        ]);
+        return redirect()->route("index");
     }
 }
