@@ -14,7 +14,12 @@ class RecapController extends Controller
      * hasil rekapitulasi sebelumnya dan tombol untuk mengulang proses
      * rekapitulasi.
      */
-    public function index(Organization $organization) {}
+    public function index(Organization $organization)
+    {
+        $hasPreviousRecap = $organization->ballots()->whereNotNull('verified_at')->exists();
+
+        return view('recap.index', compact('organization', 'hasPreviousRecap'));
+    }
 
     /**
      * Fungsi untuk memulai proses rekapitulasi.
@@ -26,7 +31,23 @@ class RecapController extends Controller
      * 
      * Redirect user ke route organizations.recap.ballots.
      */
-    public function start(Organization $organization) {}
+
+
+    public function start(Organization $organization)
+    {
+        //$allVerified = $organization->ballots()->where('is_verified', 1)->exists();
+        $allVerified = $organization->ballots()->where('is_verified', 1)->whereNotNull('verified_at')->count() === $organization->ballots()->count();
+
+
+        if ($allVerified) {
+            $organization->ballots()->update([
+                'is_verified' => 0,
+                'verified_at' => null,
+            ]);
+        }
+
+        return redirect()->route('organizations.recap.ballots', ['organization' => $organization->code]);
+    }
 
 
     /**
@@ -43,7 +64,22 @@ class RecapController extends Controller
      * 
      * return biasa aja datanya, nanti aku handle
      */
-    public function ballots(Organization $organization) {}
+    public function ballots(Organization $organization)
+    {
+        $ballot = $organization->ballots()
+            ->where('is_confirmed', 1)
+            ->whereNotNull('confirmed_at')
+            ->where('is_verified', 0)
+            ->whereNull('verified_at')
+            ->orderBy('confirmed_at', 'asc')
+            ->first();
+
+        if (!$ballot) {
+            return redirect()->route('organizations.recap.result', ['organization' => $organization->code]);
+        }
+
+        return response()->json($ballot);
+    }
 
     /**
      * Halaman untuk menampilkan hasil rekapitulasi.
