@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageProps } from "@/types";
-import { Icon } from "@iconify/vue/dist/iconify.js";
 import { Link, usePage } from "@inertiajs/vue3";
 import { LogOut } from "lucide-vue-next";
 import { ref } from "vue";
@@ -23,7 +22,7 @@ const isOpen = ref(false);
 
 <template>
     <div class="min-h-dvh flex items-center justify-center p-4">
-        <div class="max-w-screen-md w-full space-y-4">
+        <div class="max-w-md w-full space-y-4">
             <Card>
                 <CardHeader class="space-y-2 border-b text-center text-pretty">
                     <Avatar class="size-24 mx-auto" @click="isOpen = !isOpen">
@@ -107,29 +106,6 @@ const isOpen = ref(false);
                             <CardDescription>
                                 Maaf, pemilihan masih belum dibuka nih.
                             </CardDescription>
-                        </div>
-                    </CardContent>
-                    <CardContent class="p-6 border-b text-center space-y-4">
-                        <div>
-                            <CardTitle class="text-2xl font-extrabold">
-                                TAPI TUNGGU!
-                            </CardTitle>
-                            <CardDescription>
-                                Pamer ke sosmed dulu gasi kalo udah siap vote?!
-                            </CardDescription>
-                        </div>
-                        <div class="flex items-center justify-center gap-4">
-                            <Icon
-                                icon="tabler:arrow-wave-right-down"
-                                class="size-16 text-orange-500 -rotate-[24deg]"
-                            />
-                            <Button size="lg" class="text-lg font-extrabold">
-                                🔥SHARE🔥
-                            </Button>
-                            <Icon
-                                icon="tabler:arrow-wave-left-up"
-                                class="size-16 text-orange-500 -rotate-[24deg]"
-                            />
                         </div>
                     </CardContent>
                 </template>
