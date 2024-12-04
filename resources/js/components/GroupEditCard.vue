@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { PageProps } from "@/types";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
+import { Settings } from "lucide-vue-next";
 import FormMessage from "./FormMessage.vue";
 import { Button } from "./ui/button";
 import {
@@ -42,9 +43,12 @@ const remove = () => {
 
 <template>
     <Card>
-        <CardHeader>
-            <CardTitle>Add New Group</CardTitle>
-            <CardDescription>Please complete the form</CardDescription>
+        <CardHeader class="flex-row justify-between gap-4">
+            <div class="space-y-1.5">
+                <CardTitle>Group</CardTitle>
+                <CardDescription>Settings</CardDescription>
+            </div>
+            <Settings class="size-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
             <form

@@ -60,7 +60,7 @@ const organization = page.props.organization;
                             <CardTitle>Groups</CardTitle>
                             <CardDescription>Manage groups</CardDescription>
                         </div>
-                        <Layers class="text-muted-foreground" />
+                        <Layers class="size-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent class="grid xl:grid-cols-2 gap-4">
                         <Link
