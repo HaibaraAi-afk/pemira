@@ -41,6 +41,11 @@ class Organization extends Model
         return $this->hasMany(Ballot::class);
     }
 
+    public function ballotDetails()
+    {
+        return $this->hasMany(BallotDetail::class);
+    }
+
     public function verifiedBallots()
     {
         return $this->ballots->where("is_verified", true);

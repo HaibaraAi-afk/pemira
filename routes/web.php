@@ -69,6 +69,12 @@ Route::middleware("auth")->group(function () {
     Route::prefix("organizations/{organization}")->middleware(ComitteeMiddleware::class)->group(function () {
         Route::get("/", [OrganizationDashboardController::class, "dashboard"])
             ->name("organizations.dashboard");
+        Route::post("/open", [OrganizationDashboardController::class, "open"])
+            ->name("organizations.open");
+        Route::post("/close", [OrganizationDashboardController::class, "close"])
+            ->name("organizations.close");
+        Route::post("/reset", [OrganizationDashboardController::class, "reset"])
+            ->name("organizations.reset");
 
         Route::prefix("/recap")->group(function () {
             Route::get("/", [RecapController::class, "index"])

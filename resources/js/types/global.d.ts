@@ -1,7 +1,7 @@
 import { PageProps as InertiaPageProps } from "@inertiajs/core";
 import { AxiosInstance } from "axios";
 import { route as ziggyRoute } from "ziggy-js";
-import { PageProps as AppPageProps } from "./";
+import { PageProps as AppPageProps, User } from "./";
 
 declare global {
     interface Window {
@@ -55,6 +55,19 @@ declare global {
 
     interface Whitelist {
         npm: string;
+    }
+
+    interface Ballot {
+        id: number;
+        organization_id: number;
+        user_id: number;
+        ktm: string;
+        verification: string;
+        is_verified: boolean | null;
+        verified_at: string | null;
+        created_at: string;
+
+        user?: User;
     }
 }
 
