@@ -23,15 +23,6 @@ Route::middleware("guest")->group(function () {
         ->name("auth.callback");
 });
 
-Route::prefix("test")->group(function () {
-    Route::get("/vote/{organization}", [VoteController::class, "organization"])
-        ->name("vote.organization");
-    Route::post("/ktm", [VoteController::class, "storeKtm"])
-        ->name("ktm.store");
-    Route::post("/verification", [VoteController::class, "storeVerification"])
-        ->name("verification.store");
-});
-
 Route::middleware("auth")->group(function () {
     Route::get("/", [VoteController::class, "index"])->name("index");
 
