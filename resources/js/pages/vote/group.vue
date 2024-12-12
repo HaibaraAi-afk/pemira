@@ -7,7 +7,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Link, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 
@@ -75,8 +74,10 @@ const submit = () => {
                         >
                             <div class="grid grid-cols-2 divide-x">
                                 <div>
-                                    <Skeleton class="w-full aspect-square" />
-                                    <CardHeader class="text-sm">
+                                    <img
+                                        :src="`/storage/${candidate.picture}`"
+                                    />
+                                    <CardHeader class="p-4 text-sm">
                                         <CardTitle class="leading-normal">
                                             {{ candidate.name_1 }}
                                             <template v-if="candidate.name_2">
@@ -89,25 +90,27 @@ const submit = () => {
                                     </CardHeader>
                                 </div>
                                 <div>
-                                    <CardHeader>
+                                    <CardHeader class="p-4">
                                         <CardDescription
-                                            class="text-foreground"
+                                            class="text-foreground text-xs"
                                         >
                                             Visi
                                         </CardDescription>
-                                        <CardDescription>
-                                            {{ candidate.vision }}
-                                        </CardDescription>
+                                        <pre
+                                            class="font-sans text-xs text-muted-foreground text-wrap"
+                                            >{{ candidate.vision }}</pre
+                                        >
                                     </CardHeader>
-                                    <CardContent>
+                                    <CardContent class="px-4 pb-4">
                                         <CardDescription
-                                            class="text-foreground"
+                                            class="text-foreground text-xs"
                                         >
                                             Misi
                                         </CardDescription>
-                                        <CardDescription>
-                                            {{ candidate.mission }}
-                                        </CardDescription>
+                                        <pre
+                                            class="font-sans text-xs text-muted-foreground text-wrap"
+                                            >{{ candidate.mission }}</pre
+                                        >
                                     </CardContent>
                                 </div>
                             </div>

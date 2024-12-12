@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class UserVerificationController extends Controller
@@ -25,10 +26,16 @@ class UserVerificationController extends Controller
             "verification" => "required|image",
         ]);
 
+        $ktm = Storage::disk("public")->put("ktms", $request->file("ktm"));
+        $verification = Storage::disk("public")->put(
+            "verifications",
+            $request->file("verification")
+        );
+
         $user = $request->user();
         $user->verification()->create([
-            "ktm" => $request->file("ktm")->store("ktms"),
-            "verification" => $request->file("verification")->store("verifications"),
+            "ktm" => $ktm,
+            "verification" => $verification,
         ]);
 
         return redirect()->route("index");

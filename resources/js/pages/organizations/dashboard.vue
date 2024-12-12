@@ -56,6 +56,14 @@ const reset = () => {
     const form = useForm({});
     form.post(route("organizations.reset", props.organization.id));
 };
+
+const recap = () => {
+    router.visit(
+        route("organizations.recap.confirmation", {
+            organization: props.organization.id,
+        })
+    );
+};
 </script>
 
 <template>
@@ -78,7 +86,7 @@ const reset = () => {
                         description="Pemilihan akan direset dan semua surat suara akan dihapus."
                         @accept="reset"
                     >
-                        <Button variant="destructive">Reset Pemilihan</Button>
+                        <Button variant="outline">Reset Pemilihan</Button>
                     </ConfirmationDialog>
                     <ConfirmationDialog
                         v-if="!organization.is_open"
@@ -86,7 +94,15 @@ const reset = () => {
                         description="Pemilihan akan dimulai dan pemilih dapat mengirimkan surat suara mereka."
                         @accept="open"
                     >
-                        <Button>Mulai Pemilihan</Button>
+                        <Button
+                            :variant="
+                                organization.ballots_count > 0
+                                    ? 'outline'
+                                    : 'default'
+                            "
+                        >
+                            Buka Pemilihan
+                        </Button>
                     </ConfirmationDialog>
                     <ConfirmationDialog
                         v-else
@@ -96,6 +112,15 @@ const reset = () => {
                     >
                         <Button variant="destructive">Tutup Pemilihan</Button>
                     </ConfirmationDialog>
+                    <Button
+                        v-if="
+                            !organization.is_open &&
+                            organization.ballots_count > 0
+                        "
+                        @click="recap"
+                    >
+                        Mulai Validasi
+                    </Button>
                 </CardHeader>
             </div>
             <div class="grid grid-cols-2 divide-x">
@@ -135,10 +160,7 @@ const reset = () => {
                                 No data yet
                             </TableCell>
                         </TableRow>
-                        <TableRow
-                            v-for="ballot in ballots.data"
-                            class="even:bg-gray-100"
-                        >
+                        <TableRow v-for="ballot in ballots.data">
                             <TableCell class="pl-6">
                                 {{ ballot.user?.npm }}
                             </TableCell>

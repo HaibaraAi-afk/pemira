@@ -8,7 +8,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Link, router } from "@inertiajs/vue3";
 
 const props = defineProps<{
@@ -54,7 +53,9 @@ const submit = () => {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div class="grid grid-cols-5 gap-4">
+                    <div
+                        class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+                    >
                         <div
                             v-for="detail in details"
                             class="flex flex-col gap-2"
@@ -63,7 +64,9 @@ const submit = () => {
                                 {{ detail.group?.name }}
                             </CardTitle>
                             <Card>
-                                <Skeleton class="w-full aspect-square" />
+                                <img
+                                    :src="`/storage/${detail.candidate?.picture}`"
+                                />
                                 <CardHeader class="text-sm">
                                     <CardTitle class="leading-normal">
                                         {{ detail.candidate?.name_1 }}

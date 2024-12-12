@@ -71,9 +71,13 @@ Route::middleware("auth")->group(function () {
 
         Route::prefix("/recap")->group(function () {
             Route::get("/", [RecapController::class, "index"])
-                ->name("organizations.recap");
-            Route::post("/start", [RecapController::class, "start"])
-                ->name("organizations.recap.start");
+                ->name("organizations.recap.confirmation");
+            Route::get("/validate", [RecapController::class, "validate"])
+                ->name("organizations.recap.validate");
+            Route::get("/reset", [RecapController::class, "reset"])
+                ->name("organizations.recap.reset");
+            Route::post("/validate", [RecapController::class, "validateStore"])
+                ->name("organizations.recap.validate.store");
             Route::get("/ballots", [RecapController::class, "ballots"])
                 ->name("organizations.recap.ballots");
             Route::get("/result", [RecapController::class, "result"])

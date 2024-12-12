@@ -51,6 +51,8 @@ declare global {
         vision: string;
         mission: string;
         picture: string;
+
+        votes?: number;
     }
 
     interface Whitelist {
