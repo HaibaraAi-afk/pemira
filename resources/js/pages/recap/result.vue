@@ -92,7 +92,7 @@ const ballotsChart = [
                                 class="relative"
                             >
                                 <div
-                                    class="absolute top-4 right-4 size-12 bg-primary rounded-full text-sm font-bold shadow text-white flex items-center justify-center"
+                                    class="absolute top-4 right-4 size-12 bg-white border rounded-full text-lg font-bold shadow text-black flex items-center justify-center"
                                 >
                                     {{ candidate.votes }}
                                 </div>

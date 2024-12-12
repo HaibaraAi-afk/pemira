@@ -65,18 +65,25 @@ const submit = () => {
                 <CardContent>
                     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <Card
-                            v-for="candidate in candidates"
+                            v-for="(candidate, number) in candidates"
                             :class="{
                                 outline: selected == candidate.id,
                             }"
-                            class="cursor-pointer overflow-hidden"
+                            class="aspect-square cursor-pointer overflow-hidden"
                             @click="selected = candidate.id"
                         >
-                            <div class="grid grid-cols-2 divide-x">
+                            <div class="size-full grid grid-cols-2 divide-x">
                                 <div>
-                                    <img
-                                        :src="`/storage/${candidate.picture}`"
-                                    />
+                                    <div class="relative">
+                                        <div
+                                            class="absolute bottom-4 left-4 size-8 flex items-center justify-center shadow bg-white border rounded-full text-lg font-bold"
+                                        >
+                                            {{ number + 1 }}
+                                        </div>
+                                        <img
+                                            :src="`/storage/${candidate.picture}`"
+                                        />
+                                    </div>
                                     <CardHeader class="p-4 text-sm">
                                         <CardTitle class="leading-normal">
                                             {{ candidate.name_1 }}
@@ -89,7 +96,7 @@ const submit = () => {
                                         </CardTitle>
                                     </CardHeader>
                                 </div>
-                                <div>
+                                <div class="overflow-y-auto">
                                     <CardHeader class="p-4">
                                         <CardDescription
                                             class="text-foreground text-xs"
