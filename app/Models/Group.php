@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
@@ -35,10 +36,33 @@ class Group extends Model
         return $this->ballots->where("is_verified", true);
     }
 
-    public function next()
+    public function next($year, $major)
     {
-        return $this->organization->groups
+        return $this->organization->groups()
             ->where("ordering", ">", $this->ordering)
+            ->where(function (Builder $query) use ($year) {
+                $query->where("year", null)
+                    ->orWhere("year", $year);
+            })
+            ->where(function (Builder $query) use ($major) {
+                $query->where("major", null)
+                    ->orWhere("major", $major);
+            })
+            ->first();
+    }
+
+    public function prev($year, $major)
+    {
+        return $this->organization->groups()
+            ->where("ordering", "<", $this->ordering)
+            ->where(function (Builder $query) use ($year) {
+                $query->where("year", null)
+                    ->orWhere("year", $year);
+            })
+            ->where(function (Builder $query) use ($major) {
+                $query->where("major", null)
+                    ->orWhere("major", $major);
+            })
             ->first();
     }
 }

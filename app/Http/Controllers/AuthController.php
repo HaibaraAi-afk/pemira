@@ -43,7 +43,7 @@ class AuthController extends Controller
             "npm" => $npm,
             "email" => $user->getEmail(),
             "year" => substr($npm, 0, 2),
-            "major" => substr($npm, 2, 2),
+            "major" => substr($npm, 4, 2),
             "name" => $user->getName(),
             "google_id" => $user->getId(),
             "avatar" => $user->getAvatar(),

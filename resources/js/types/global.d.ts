@@ -69,6 +69,24 @@ declare global {
 
         user?: User;
     }
+
+    interface UserVerification {
+        id: number;
+        user_id: number;
+        ktm: string | null;
+        verification: string | null;
+    }
+
+    interface BallotDetail {
+        id: number;
+        organization_id: number;
+        group_id: number;
+        ballot_id: number;
+        candidate_id: number;
+
+        group?: Group;
+        candidate?: Candidate;
+    }
 }
 
 declare module "vue" {

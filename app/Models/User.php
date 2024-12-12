@@ -17,6 +17,11 @@ class User extends Authenticatable
         "avatar",
     ];
 
+    public function verification()
+    {
+        return $this->hasOne(UserVerification::class);
+    }
+
     public function ballot()
     {
         return $this->hasOne(Ballot::class);

@@ -2,119 +2,91 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BallotDetail;
 use App\Models\Group;
 use App\Models\Organization;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class VoteController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render("vote/index");
+        $user = $request->user();
+        $user->load("verification");
+
+        $organizations = Organization::query()
+            ->where(function (Builder $query) use ($user) {
+                $query->where("major", null)
+                    ->orWhere("major", $user->major);
+            })
+            ->where("is_open", true)
+            ->get();
+
+        return Inertia::render("vote/index", [
+            "verification" => $user->verification,
+            "organizations" => $organizations,
+        ]);
     }
 
     public function organization(Request $request, Organization $organization)
     {
-        // Cek apakah user sudah punya Ballot
-        // - Jika belum, buat Ballot kosong
         $user = $request->user();
-        $ballot = $user->ballot;
+        $ballot = $user->ballot()
+            ->where("organization_id", $organization->id)
+            ->first();
+
         if (!$ballot) {
-            $ballot = $user->ballot()->create();
+            $user->ballot()->create([
+                "organization_id" => $organization->id,
+            ]);
         }
 
-        // Kalau butuh user pakai ini
-        // $user = User::find($request->user_id);
-        // return $user;
+        $first = $organization->firstGroup($user->year, $user->major);
 
-        // Kalau sudah selesai diganti ini
-        // $user = $request->user();
-
-        // Check apakah user sudah punya Ballot
-        // Jika sudah punya Ballot
-        if ($ballot) {
-            // Ambil data BallotDetail paling akhir
-            // Jika tidak, redirect ke route("vote.index")
-            // - Ambil data Ballot dan BallotDetail paling akhir
-            // - Jika belum ada data BallotDetail, redirect ke route("vote.group")
-            //   dengan parameter group pertama dari organization ($oganization->firstGroup())
-            if ($ballot->ballotDetails->isEmpty()) {
-                return redirect()->route("vote.group", $organization->groups->first());
-            }
-            // - Jika sudah ada data BallotDetail
-            //   - Ambil data group selanjutnya dari BallotDetail paling akhir
-            $lastBallotDetail = $ballot->details()->latest()();
-            $nextGroup = $lastBallotDetail->group->next();
-            //   - Jika ada group selanjutnya, redirect ke route("vote.group") dengan parameter group tersebut
-            if ($nextGroup) {
-                return redirect()->route("vote.group", $nextGroup);
-            }
-            //   - Jika tidak, redirect ke route("vote.index")
-            return redirect()->route("vote.index");
-        }
-    }
-
-    public function ktm(Request $request, Organization $organization)
-    {
-        // return Inertia::render("vote/ktm");
-    }
-
-    public function storeKtm(Request $request, Organization $organization)
-    {
-        // Validasi parameter ktm
-        $request->validate([
-            'ktm' => [
-                'required',
-                'image',
-                'mimes:png,jpg,jpeg',
-
-            ]
+        return redirect()->route("vote.group", [
+            "organization" => $organization->id,
+            "group" => $first->id
         ]);
-        // Ambil user dari request
-        $user = $request->user();
-        // Simpan gambar KTM ke storage folder /ktms
-        $pathKtm = $request->file("ktm")->store("ktms");
-        // Simpan path gambar KTM ke ballot user
-        $user->ballot->update([
-            "ktm" => $pathKtm,
-            'ktm_is_verified' => true,
-            'ktm_verified_at' => now(),
-        ]);
-
-        return redirect()->route("vote.verification");
     }
 
-    public function verification(Request $request, Organization $organization)
-    {
-        // return Inertia::render("vote/verification");
-    }
-
-    public function storeVerification(
-        Request $request,
-        Organization $organization
+    public function group(
+        Organization $organization,
+        Group $group,
+        Request $request
     ) {
-        // Validasi parameter verification
-        // Ambil user dari request
-        $request->validate([
-            'verification' => [
-                'required',
-                'image',
-                'mimes:png,jpg,jpeg',
-            ]
-        ]);
         $user = $request->user();
-        // Simpan verification ke storage folder /verifications
-        $pathVerification = $request->file("verification")->store("verifications");
-        // Simpan path gambar verification ke ballot user
-        $request->user()->ballot->update(["verification" => $pathVerification]);
+        $ballot = $user->ballot()
+            ->where("organization_id", $organization->id)
+            ->first();
+        $ballotDetail = $ballot->details()
+            ->where("group_id", $group->id)
+            ->first();
 
-        return redirect()->route("vote.group", $organization->groups->first());
+        return Inertia::render("vote/group", [
+            "organization" => $organization,
+            "group" => $group,
+            "candidates" => $group->candidates,
+            "ballotDetail" => $ballotDetail,
+        ]);
     }
 
-    public function group(Organization $organization, Group $group)
-    {
-        // return Inertia::render("vote/group")->with("nextGroup", $group->next());
+    public function groupPrevious(
+        Organization $organization,
+        Group $group,
+        Request $request
+    ) {
+        $user = $request->user();
+        $previousGroup = $group->prev($user->year, $user->major);
+        if ($previousGroup) {
+            return redirect()->route("vote.group", [
+                "organization" => $organization->id,
+                "group" => $previousGroup->id,
+            ]);
+        }
+
+        return redirect()->route("index");
     }
 
     public function storeGroup(
@@ -122,40 +94,75 @@ class VoteController extends Controller
         Organization $organization,
         Group $group
     ) {
-        // Validasi parameter candidate_id
         $request->validate([
             'candidate_id' => 'required|exists:candidates,id',
         ]);
-        // Tambahkan data BallotDetail dengan data tersebut
-        $ballotDetail = $request->user()->ballot->details()->create([
-            'organization_id' => $organization->id,
-            'group_id' => $group->id,
-            'ballot_id' => $request->user()->ballot->id,
-            'candidate_id' => $request->input('candidate_id'),
-        ]);
-        $nextGroup = $group->next();
-        // check if there is next group
-        if ($nextGroup) {
-            return redirect()->route("vote.group", ["group" => $nextGroup]);
+
+        $user = $request->user();
+        $ballot = $user->ballot()
+            ->where("organization_id", $organization->id)
+            ->first();
+
+        $detail = $ballot->details()
+            ->where("group_id", $group->id)
+            ->first();
+
+        if ($detail) {
+            $detail->update([
+                "candidate_id" => $request->candidate_id,
+            ]);
+        } else {
+            $ballot->details()->create([
+                "organization_id" => $organization->id,
+                "group_id" => $group->id,
+                "candidate_id" => $request->candidate_id,
+            ]);
         }
-        // if there is no next group
+
+        $nextGroup = $group->next($user->year, $user->major);
+
         if (!$nextGroup) {
-            return redirect()->route("vote.result.confirm");
+            return redirect()->route("vote.result", [
+                "organization" => $organization->id,
+            ]);
         }
+
+        return redirect()->route("vote.group", [
+            "organization" => $organization->id,
+            "group" => $nextGroup,
+        ]);
     }
 
-    public function result(Organization $organization)
+    public function result(Organization $organization, Request $request)
     {
-        // return Inertia::render("vote/result");
+        $user = $request->user();
+        $ballot = $user->ballot()
+            ->where("organization_id", $organization->id)
+            ->first();
+        $details = $ballot->details()
+            ->with("group", "candidate")
+            ->get();
+
+        return Inertia::render("vote/result", [
+            "organization" => $organization,
+            "details" => $details
+        ]);
     }
 
     public function confirmResult(Request $request, Organization $organization)
     {
-        // Update ballot user is_confirmed menjadi true dan confirmed_at menjadi now()
-        $request->user()->ballot->update([
-            'is_confirmed' => true,
-            'confirmed_at' => now(),
+        $user = $request->user();
+        $ballot = $user->ballot()
+            ->where("organization_id", $organization->id)
+            ->first();
+
+        $ballot->update([
+            "is_confirmed" => 1,
+            "confirmed_at" => now(),
         ]);
-        return redirect()->route("index");
+
+        return redirect()
+            ->route("index")
+            ->with("flash.message", "Terima kasih telah berpartisipasi! 🤩");
     }
 }

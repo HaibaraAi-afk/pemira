@@ -13,6 +13,8 @@ class Ballot extends Model
         "verification",
         "is_verified",
         "verified_at",
+        "is_confirmed",
+        "confirmed_at",
     ];
 
     protected $casts = [

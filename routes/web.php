@@ -8,10 +8,16 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrganizationDashboardController;
 use App\Http\Controllers\RecapController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserVerificationController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\WhitelistController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ComitteeMiddleware;
+use App\Http\Middleware\EnsureGroupBelongsToOrganization;
+use App\Http\Middleware\EnsureUserCanVote;
+use App\Http\Middleware\EnsureUserCanVoteGroup;
+use App\Http\Middleware\EnsureUserHasBallot;
+use App\Http\Middleware\EnsureUserIsVerified;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,13 +32,9 @@ Route::middleware("guest")->group(function () {
 Route::middleware("auth")->group(function () {
     Route::get("/", [VoteController::class, "index"])->name("index");
 
-    Route::get("/ktm", [VoteController::class, "ktm"])->name("ktm");
-    Route::post("/ktm", [VoteController::class, "storeKtm"])
-        ->name("ktm.store");
-
-    Route::get("/verification", [VoteController::class, "verification"])
+    Route::get("/verification", [UserVerificationController::class, "index"])
         ->name("verification");
-    Route::post("/verification", [VoteController::class, "storeVerification"])
+    Route::post("/verification", [UserVerificationController::class, "store"])
         ->name("verification.store");
 
     Route::get("/logout", [AuthController::class, "logout"])->name("logout");
@@ -79,18 +81,31 @@ Route::middleware("auth")->group(function () {
         });
     });
 
-    Route::prefix("/vote/{organization}")->group(function () {
-        Route::get("/", [VoteController::class, "organization"])
-            ->name("vote.organization");
+    Route::prefix("/vote/{organization}")
+        ->middleware([
+            EnsureUserCanVote::class,
+            EnsureUserIsVerified::class,
+        ])
+        ->group(function () {
+            Route::get("/", [VoteController::class, "organization"])
+                ->name("vote.organization");
 
-        Route::get("/result", [VoteController::class, "result"])
-            ->name("vote.result");
-        Route::post("/result", [VoteController::class, "confirmResult"])
-            ->name("vote.result.confirm");
+            Route::get("/result", [VoteController::class, "result"])
+                ->name("vote.result");
+            Route::post("/result", [VoteController::class, "confirmResult"])
+                ->name("vote.result.confirm");
 
-        Route::get("/{group}", [VoteController::class, "group"])
-            ->name("vote.group");
-        Route::post("/{group}", [VoteController::class, "storeGroup"])
-            ->name("vote.group.store");
-    });
+            Route::middleware([
+                EnsureUserHasBallot::class,
+                EnsureGroupBelongsToOrganization::class,
+                EnsureUserCanVoteGroup::class,
+            ])->group(function () {
+                Route::get("/{group}", [VoteController::class, "group"])
+                    ->name("vote.group");
+                Route::get("/{group}/previous", [VoteController::class, "groupPrevious"])
+                    ->name("vote.group.previous");
+                Route::post("/{group}", [VoteController::class, "storeGroup"])
+                    ->name("vote.group.store");
+            });
+        });
 });

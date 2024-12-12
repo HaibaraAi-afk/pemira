@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Organization extends Model
@@ -21,9 +22,18 @@ class Organization extends Model
         ];
     }
 
-    public function firstGroup()
+    public function firstGroup($year, $major)
     {
-        return $this->groups->where("ordering", 1)->first();
+        return $this->groups()->where("ordering", 1)
+            ->where(function (Builder $query) use ($year) {
+                $query->where("year", null)
+                    ->orWhere("year", $year);
+            })
+            ->where(function (Builder $query) use ($major) {
+                $query->where("major", null)
+                    ->orWhere("major", $major);
+            })
+            ->first();
     }
 
     public function groups()
