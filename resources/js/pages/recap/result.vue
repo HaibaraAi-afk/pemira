@@ -38,7 +38,7 @@ const ballotsChart = [
                 <CardTitle>Hasil Validasi</CardTitle>
             </CardHeader>
             <CardContent>
-                <Tabs default-value="overview">
+                <Tabs default-value="ballots">
                     <TabsList class="block w-fit mx-auto">
                         <TabsTrigger value="ballots">Surat Suara</TabsTrigger>
                         <TabsTrigger
@@ -54,13 +54,15 @@ const ballotsChart = [
                             <Card>
                                 <CardHeader>
                                     <CardTitle>Surat Suara</CardTitle>
-                                    <CardTitle>{{ ballots }}</CardTitle>
+                                    <CardTitle class="text-4xl">
+                                        {{ ballots }}
+                                    </CardTitle>
                                 </CardHeader>
                             </Card>
                             <Card>
                                 <CardHeader>
                                     <CardTitle>Surat Suara Sah</CardTitle>
-                                    <CardTitle>
+                                    <CardTitle class="text-4xl">
                                         {{ ballots_verified }}
                                     </CardTitle>
                                 </CardHeader>
