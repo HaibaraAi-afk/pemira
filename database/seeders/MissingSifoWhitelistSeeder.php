@@ -20,7 +20,7 @@ class MissingSifoWhitelistSeeder extends Seeder
                 continue;
             }
             Whitelist::query()->create([
-                "npm" => `24082010$i`,
+                "npm" => "24082010{$i}",
             ]);
         }
     }
