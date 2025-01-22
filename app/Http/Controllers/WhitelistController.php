@@ -38,7 +38,7 @@ class WhitelistController extends Controller
             $query->where('type', 'voter');
         })->delete();
         foreach ($whitelist as $npm) {
-            Whitelist::create([
+            Whitelist::query()->firstOrCreate([
                 'npm' => $npm,
             ]);
         }
