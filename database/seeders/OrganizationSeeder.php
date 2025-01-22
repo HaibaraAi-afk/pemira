@@ -30,7 +30,14 @@ class OrganizationSeeder extends Seeder
                 "vision" => "Mewujudkan Badan Eksekutif Mahasiswa Fakultas Ilmu Komputer yang progresif kolaboratif, dalam membangun mahasiswa yang berdaya saing di era digital dengan berlandaskan tri dharma perguruan tinggi.",
                 "mission" => "1. Mendorong perkembangan mahasiswa yang progresif dengan menerapkan teknologi dan keilmuan di bidang komputer untuk memberdayakan mahasiswa dalam menciptakan solusi inovatif bagi permasalahan sosial dan industri\n2. Membangun budaya kolaboratif dengan mahasiswa, organisasi, dan lembaga eksternal untuk menciptakan lingkungan yang suportif dan inovatif dalam pengembangan potensi mahasiswa.",
                 "picture" => "/bem1.jpg",
-            ]
+            ],
+            [
+                "organization_id" => $bem->id,
+                "name_1" => "Kotak Kosong",
+                "vision" => "",
+                "mission" => "",
+                "picture" => "/kosong.jpg",
+            ],
         ]);
 
         $blm = Organization::query()->create([
@@ -43,6 +50,7 @@ class OrganizationSeeder extends Seeder
         $blm->groups()->create([
             "name" => "BLM Informatika",
             "major" => 10,
+            "min_candidates" => 2,
             "ordering" => 1,
         ])->candidates()->createMany([
             [
@@ -65,6 +73,7 @@ class OrganizationSeeder extends Seeder
         $blm->groups()->create([
             "name" => "BLM Sistem Informasi",
             "major" => 20,
+            "min_candidates" => 2,
             "ordering" => 1,
         ])->candidates()->createMany([
             [
@@ -87,6 +96,7 @@ class OrganizationSeeder extends Seeder
         $blm->groups()->create([
             "name" => "BLM Sains Data",
             "major" => 30,
+            "min_candidates" => 2,
             "ordering" => 1,
         ])->candidates()->createMany([
             [
