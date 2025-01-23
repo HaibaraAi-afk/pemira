@@ -11,7 +11,9 @@ class OrganizationDashboardController extends Controller
     public function dashboard(Organization $organization)
     {
         $organization->loadCount("ballots");
-        $ballots = $organization->ballots()->with("user")->cursorPaginate(5);
+        $ballots = $organization->ballots()->with("user")
+            ->where("is_confirmed", 1)
+            ->cursorPaginate(5);
 
         return Inertia::render("organizations/dashboard", [
             "organization" => $organization,
