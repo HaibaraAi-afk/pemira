@@ -37,8 +37,8 @@ class OrganizationDashboardController extends Controller
 
     public function reset(Organization $organization)
     {
-        $organization->ballots()->delete();
         $organization->ballotDetails()->delete();
+        $organization->ballots()->delete();
         return redirect()->route("organizations.dashboard", [
             "organization" => $organization,
         ]);
