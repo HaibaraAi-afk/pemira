@@ -18,7 +18,7 @@ const props = defineProps<{
 }>();
 
 const form = useForm({
-    candidates_id: null,
+    candidate_ids: null,
 });
 
 const selected = ref(
@@ -42,7 +42,7 @@ const submit = () => {
         props.candidates.length >= props.group.min_candidates
     ) {
         form.setError(
-            "candidates_id",
+            "candidate_ids",
             `Pilihlah minimal ${props.group.min_candidates} kandidat!`
         );
         return;
@@ -87,10 +87,10 @@ const submit = () => {
                         </Button>
                     </div>
                     <div
-                        v-if="form.errors.candidates_id"
+                        v-if="form.errors.candidate_ids"
                         class="text-destructive text-sm font-medium"
                     >
-                        {{ form.errors.candidates_id }}
+                        {{ form.errors.candidate_ids }}
                     </div>
                 </CardHeader>
                 <CardContent>
