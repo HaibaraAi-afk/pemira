@@ -42,7 +42,6 @@ class AuthController extends Controller
             return redirect(route("login"))
                 ->with("flash.message", "Maaf.. NPM kamu tidak terdaftar sebagai pemilih 😔")
                 ->with("flash.type", "destructive");
-        } else {
             Log::debug("FAILED");
             Log::debug(DB::getQueryLog());
         }
