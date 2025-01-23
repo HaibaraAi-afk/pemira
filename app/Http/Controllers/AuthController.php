@@ -33,6 +33,7 @@ class AuthController extends Controller
 
         $npm = explode("@", $user->email)[0];
         Log::debug("NPM: {$npm} {$user->email}");
+        Log::debug(Whitelist::query()->find($npm));
         if (!Whitelist::query()->find($npm)) {
             return redirect(route("login"))
                 ->with("flash.message", "Maaf.. NPM kamu tidak terdaftar sebagai pemilih 😔")
