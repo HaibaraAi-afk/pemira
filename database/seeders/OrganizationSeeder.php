@@ -50,7 +50,6 @@ class OrganizationSeeder extends Seeder
         $bem->groups()->create([
             "name" => "BLM Informatika",
             "major" => 10,
-            "min_candidates" => 2,
             "ordering" => 1,
         ])->candidates()->createMany([
             [
@@ -73,7 +72,6 @@ class OrganizationSeeder extends Seeder
         $bem->groups()->create([
             "name" => "BLM Sistem Informasi",
             "major" => 20,
-            "min_candidates" => 2,
             "ordering" => 1,
         ])->candidates()->createMany([
             [
@@ -96,7 +94,6 @@ class OrganizationSeeder extends Seeder
         $bem->groups()->create([
             "name" => "BLM Sains Data",
             "major" => 30,
-            "min_candidates" => 2,
             "ordering" => 1,
         ])->candidates()->createMany([
             [
