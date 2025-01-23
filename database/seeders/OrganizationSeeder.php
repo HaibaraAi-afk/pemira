@@ -14,14 +14,14 @@ class OrganizationSeeder extends Seeder
     {
         // CAPRES WAPRES BEM
         $bem = Organization::query()->create([
-            "name" => "BEM",
+            "name" => "BLM & BEM",
             "logo" => "/organizations/bem.jpg",
             "ordering" => 1,
         ]);
 
         $bem->groups()->create([
-            "name" => "Ketua & Wakil Ketua",
-            "ordering" => 1,
+            "name" => "Ketua & Wakil Ketua BEM",
+            "ordering" => 2,
         ])->candidates()->createMany([
             [
                 "organization_id" => $bem->id,
@@ -40,28 +40,28 @@ class OrganizationSeeder extends Seeder
             ],
         ]);
 
-        $blm = Organization::query()->create([
-            "name" => "BLM",
-            "logo" => "/organizations/blm.jpg",
-            "ordering" => 2,
-        ]);
+        // $blm = Organization::query()->create([
+        //     "name" => "BLM",
+        //     "logo" => "/organizations/blm.jpg",
+        //     "ordering" => 2,
+        // ]);
 
         // BLM INFORMATIKA
-        $blm->groups()->create([
+        $bem->groups()->create([
             "name" => "BLM Informatika",
             "major" => 10,
             "min_candidates" => 2,
             "ordering" => 1,
         ])->candidates()->createMany([
             [
-                "organization_id" => $blm->id,
+                "organization_id" => $bem->id,
                 "name_1" => "Toni Yahya Muhammad Amin",
                 "vision" => "Menciptakan BLM yang aspiratif, transparan dan berintegritas.",
                 "mission" => "1. Mendengar dan menyuarakan aspirasi KM Ilmu Komputer\n2. Melakukan pengawasan terhadap kebijakan kampus\n3. menyampaikan laporan kinerja BLM.",
                 "picture" => "/blmif1.jpg",
             ],
             [
-                "organization_id" => $blm->id,
+                "organization_id" => $bem->id,
                 "name_1" => "Muhammad Lizamul Arsi",
                 "vision" => "Mewujudkan Kampus yang Transparan dan Akuntabel.",
                 "mission" => "1. Memastikan setiap kebijakan yang dibuat oleh BEM maupun BLM dapat diakses dan dipahami oleh seluruh mahasiswa\n2. Melayani, menampung, dan menyalurkan aspirasi demi meningkatkan kualitas layanan yang diterima oleh seluruh mahasiswa.",
@@ -70,21 +70,21 @@ class OrganizationSeeder extends Seeder
         ]);
 
         // BLM SISTEM INFORMASI
-        $blm->groups()->create([
+        $bem->groups()->create([
             "name" => "BLM Sistem Informasi",
             "major" => 20,
             "min_candidates" => 2,
             "ordering" => 1,
         ])->candidates()->createMany([
             [
-                "organization_id" => $blm->id,
+                "organization_id" => $bem->id,
                 "name_1" => "Eggy Fawas Ihsan",
                 "vision" => "Mewujudkan BLM Fasilkom sebagai lembaga legislatif yang profesional, aktif, dan solid dalam melakukan tugas dan melayani mahasiswa.",
                 "mission" => "1. Menjalankan fungsi sebagai pengawasan yang utuh\n2. Menjadi lembaga yang berintegritas\n3. Menjadikan lembaga sebagai penyalur aspirasi.",
                 "picture" => "/blmsifo1.jpg",
             ],
             [
-                "organization_id" => $blm->id,
+                "organization_id" => $bem->id,
                 "name_1" => "Alfina Rahma Fitrianah",
                 "vision" => "Membangun Badan Legislatif Mahasiswa Fasilkom yang inovatif, berintegritas, dan menjadi penghubung strategis antara mahasiswa dengan lembaga atau organisasi dalam menciptakan lingkungan kampus yang progresif.",
                 "mission" => "1. Melaksanakan tugas dan fungsi legislatif secara profesional dengan menjunjung transparansi dan akuntabilitas\n2. Mendorong budaya kolaborasi untuk menciptakan perubahan positif dan mendukung kemajuan Fasilkom UPN Veteran Jawa Timur\n3. Memperkuat peran advokasi dengan mengoptimalkan penjaringan aspirasi dan membangun komunikasi yang harmonis antara mahasiswa dan pihak-pihak organisasi atau lembaga.",
@@ -93,14 +93,14 @@ class OrganizationSeeder extends Seeder
         ]);
 
         // BLM SAINS DATAF
-        $blm->groups()->create([
+        $bem->groups()->create([
             "name" => "BLM Sains Data",
             "major" => 30,
             "min_candidates" => 2,
             "ordering" => 1,
         ])->candidates()->createMany([
             [
-                "organization_id" => $blm->id,
+                "organization_id" => $bem->id,
                 "name_1" => "Rashad Nawfal Pradipa",
                 "vision" => "Terwujudnya Badan Legislatif Mahasiswa Fakultas Ilmu Komputer yang representatif, kolaboratif, independen, dan inovatif dalam menyuarakan aspirasi mahasiswa serta aktif dalam mendorong terciptanya lingkungan akademik yang berkualitas, inklusif, dan berkelanjutan.",
                 "mission" => "1. Menyelenggarakan forum diskusi rutin untuk menjaring aspirasi mahasiswa\n2. Membuat aplikasi berbasis web untuk memudahkan mahasiswa dalam menyampaikan aspirasi\n3. Mengadakan kompetisi inovasi untuk mahasiswa\n4. Menjalin kerjasama dengan perusahaan teknologi untuk pengembangan program magang\n5. Mengkampanyekan pentingnya keberagaman dan inklusivitas di kampus.",
