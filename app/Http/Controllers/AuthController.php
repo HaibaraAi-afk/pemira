@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Whitelist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -32,13 +33,21 @@ class AuthController extends Controller
         }
 
         $npm = explode("@", $user->email)[0];
+
+        DB::enableQueryLog();
         Log::debug("NPM: {$npm} {$user->email}");
         Log::debug(Whitelist::query()->find($npm));
+
         if (!Whitelist::query()->find($npm)) {
             return redirect(route("login"))
                 ->with("flash.message", "Maaf.. NPM kamu tidak terdaftar sebagai pemilih 😔")
                 ->with("flash.type", "destructive");
+        } else {
+            Log::debug("FAILED");
+            Log::debug(DB::getQueryLog());
         }
+
+        DB::disableQueryLog();
 
         $user = User::query()->updateOrCreate([
             "npm" => $npm,
