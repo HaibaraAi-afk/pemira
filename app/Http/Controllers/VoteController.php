@@ -60,15 +60,15 @@ class VoteController extends Controller
         $ballot = $user->ballot()
             ->where("organization_id", $organization->id)
             ->first();
-        $ballotDetail = $ballot->details()
+        $ballotDetails = $ballot->details()
             ->where("group_id", $group->id)
-            ->first();
+            ->get();
 
         return Inertia::render("vote/group", [
             "organization" => $organization,
             "group" => $group,
             "candidates" => $group->candidates,
-            "ballotDetail" => $ballotDetail,
+            "ballotDetails" => $ballotDetails,
         ]);
     }
 
@@ -95,27 +95,32 @@ class VoteController extends Controller
         Group $group
     ) {
         $request->validate([
-            'candidate_id' => 'required|exists:candidates,id',
+            'candidate_ids' => 'required|exists:candidates,id',
         ]);
+
+        if (count($request->candidate_ids) < $group->min_candidates && $group->candidates_count >= $group->min_candidates) {
+            return redirect()
+                ->back()
+                ->withErrors([
+                    "candidate_ids" => "Pilih minimal {$group->min_candidates} kandidat",
+                ])
+                ->withInput();
+        }
 
         $user = $request->user();
         $ballot = $user->ballot()
             ->where("organization_id", $organization->id)
             ->first();
 
-        $detail = $ballot->details()
+        $ballot->details()
             ->where("group_id", $group->id)
-            ->first();
+            ->delete();
 
-        if ($detail) {
-            $detail->update([
-                "candidate_id" => $request->candidate_id,
-            ]);
-        } else {
+        foreach ($request->candidate_ids as $candidateId) {
             $ballot->details()->create([
                 "organization_id" => $organization->id,
                 "group_id" => $group->id,
-                "candidate_id" => $request->candidate_id,
+                "candidate_id" => $candidateId,
             ]);
         }
 

@@ -14,17 +14,41 @@ const props = defineProps<{
     organization: Organization;
     group: Group;
     candidates: Candidate[];
-    ballotDetail: BallotDetail | null;
+    ballotDetails: BallotDetail[] | null;
 }>();
 
-const selected = ref(props.ballotDetail?.candidate_id);
+const form = useForm({
+    candidates_id: null,
+});
+
+const selected = ref(
+    props.ballotDetails?.map((detail) => detail.candidate_id) ?? []
+);
+
+const select = (id: number) => {
+    if (selected.value.includes(id)) {
+        selected.value = selected.value.filter((value) => value !== id);
+    } else {
+        selected.value.push(id);
+    }
+};
 
 const submit = () => {
     if (!selected.value) {
         return;
     }
+    if (
+        selected.value.length < props.group.min_candidates &&
+        props.candidates.length >= props.group.min_candidates
+    ) {
+        form.setError(
+            "candidates_id",
+            `Pilihlah minimal ${props.group.min_candidates} kandidat!`
+        );
+        return;
+    }
     useForm({
-        candidate_id: selected.value,
+        candidate_ids: selected.value,
     }).post(
         route("vote.group.store", {
             organization: props.organization.id,
@@ -44,7 +68,8 @@ const submit = () => {
                 <CardHeader class="text-center">
                     <CardTitle>{{ group.name }}</CardTitle>
                     <CardDescription>
-                        Pilihlah salah satu kandidat di bawah ini!
+                        Pilihlah {{ group.min_candidates }} kandidat di bawah
+                        ini!
                     </CardDescription>
                     <div class="flex justify-center gap-2">
                         <Link
@@ -61,16 +86,22 @@ const submit = () => {
                             Selanjutnya
                         </Button>
                     </div>
+                    <div
+                        v-if="form.errors.candidates_id"
+                        class="text-destructive text-sm font-medium"
+                    >
+                        {{ form.errors.candidates_id }}
+                    </div>
                 </CardHeader>
                 <CardContent>
                     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <Card
                             v-for="(candidate, number) in candidates"
                             :class="{
-                                outline: selected == candidate.id,
+                                outline: selected.includes(candidate.id),
                             }"
                             class="aspect-square cursor-pointer overflow-hidden"
-                            @click="selected = candidate.id"
+                            @click="select(candidate.id)"
                         >
                             <div class="size-full grid grid-cols-2 divide-x">
                                 <div>
