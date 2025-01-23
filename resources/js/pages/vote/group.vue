@@ -28,7 +28,9 @@ const selected = ref(
 const select = (id: number) => {
     if (selected.value.includes(id)) {
         selected.value = selected.value.filter((value) => value !== id);
-    } else {
+    } else if (props.group.min_candidates === 1) {
+        selected.value = [id];
+    } else if (selected.value.length < props.group.min_candidates) {
         selected.value.push(id);
     }
 };
