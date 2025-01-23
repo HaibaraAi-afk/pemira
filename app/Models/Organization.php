@@ -24,7 +24,7 @@ class Organization extends Model
 
     public function firstGroup($year, $major)
     {
-        return $this->groups()->where("ordering", 1)
+        return $this->groups()
             ->where(function (Builder $query) use ($year) {
                 $query->where("year", null)
                     ->orWhere("year", $year);
@@ -33,6 +33,7 @@ class Organization extends Model
                 $query->where("major", null)
                     ->orWhere("major", $major);
             })
+            ->orderBy("ordering")
             ->first();
     }
 

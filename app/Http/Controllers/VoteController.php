@@ -45,6 +45,12 @@ class VoteController extends Controller
 
         $first = $organization->firstGroup($user->year, $user->major);
 
+        if (!$first) {
+            return redirect()->route("index")
+                ->with("flash.message", "Oops! sepertinya kamu tidak bisa ikut serta pemilihan organisasi ini 😅")
+                ->with("flash.type", "destructive");
+        }
+
         return redirect()->route("vote.group", [
             "organization" => $organization->id,
             "group" => $first->id
